@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="generator.mapper.FoodMapper">
+
+    <resultMap id="BaseResultMap" type="generator.po.Food">
+            <id property="foodId" column="foodId" jdbcType="INTEGER"/>
+            <result property="foodName" column="foodName" jdbcType="VARCHAR"/>
+            <result property="foodExplain" column="foodExplain" jdbcType="VARCHAR"/>
+            <result property="foodImg" column="foodImg" jdbcType="VARCHAR"/>
+            <result property="foodPrice" column="foodPrice" jdbcType="DECIMAL"/>
+            <result property="businessId" column="businessId" jdbcType="INTEGER"/>
+            <result property="remarks" column="remarks" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        foodId,foodName,foodExplain,
+        foodImg,foodPrice,businessId,
+        remarks
+    </sql>
+</mapper>

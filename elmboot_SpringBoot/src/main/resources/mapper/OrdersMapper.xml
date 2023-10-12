@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="generator.mapper.OrdersMapper">
+
+    <resultMap id="BaseResultMap" type="generator.po.Orders">
+            <id property="orderId" column="orderId" jdbcType="INTEGER"/>
+            <result property="userId" column="userId" jdbcType="VARCHAR"/>
+            <result property="businessId" column="businessId" jdbcType="INTEGER"/>
+            <result property="orderDate" column="orderDate" jdbcType="VARCHAR"/>
+            <result property="orderTotal" column="orderTotal" jdbcType="DECIMAL"/>
+            <result property="daId" column="daId" jdbcType="INTEGER"/>
+            <result property="orderState" column="orderState" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        orderId,userId,businessId,
+        orderDate,orderTotal,daId,
+        orderState
+    </sql>
+</mapper>
