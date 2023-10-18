@@ -1,26 +1,18 @@
 package com.neusoft.elmboot.mapper;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import com.neusoft.elmboot.po.User;
-import org.apache.ibatis.annotations.Update;
+import com.neusoft.elmboot.model.entity.User;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-@Mapper
-public interface UserMapper {
-    @Select("select * from user where userId=#{userId} and password=#{password}")
-    public User getUserByIdByPass(User user);
-    //明显比JDBC的要方便很多，不需要额外的改了
+/**
+ * @author 14505
+ * @description 针对表【user】的数据库操作Mapper
+ * @createDate 2023-10-17 12:51:56
+ * @Entity generator.po.User
+ */
+public interface UserMapper extends BaseMapper<User> {
 
-    @Select("select count(*) from user where userId=#{userId}")
-    public int getUserById(String userId);
-
-    @Insert("insert into user values(#{userId},#{password},#{userName},#{userSex},null,1,0)")
-    public int saveUser(User user);
-
-    @Update("update user set point = #{point} where userId = #{userId}")
-    public int updatePoint(User user);
-
-    @Select("select point from user where userId = #{userId}")
-    public double getPointById(String userId);
 }
+
+
+
+

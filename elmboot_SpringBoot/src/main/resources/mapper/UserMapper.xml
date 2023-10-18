@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="generator.mapper.UserMapper">
+<mapper namespace="com.neusoft.elmboot.mapper.UserMapper">
 
     <resultMap id="BaseResultMap" type="generator.po.User">
             <id property="userId" column="userId" jdbcType="VARCHAR"/>
@@ -12,11 +12,12 @@
             <result property="userImg" column="userImg" jdbcType="VARCHAR"/>
             <result property="delTag" column="delTag" jdbcType="INTEGER"/>
             <result property="point" column="point" jdbcType="DOUBLE"/>
+            <result property="id" column="Id" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         userId,password,userName,
         userSex,userImg,delTag,
-        point
+        point,Id
     </sql>
 </mapper>

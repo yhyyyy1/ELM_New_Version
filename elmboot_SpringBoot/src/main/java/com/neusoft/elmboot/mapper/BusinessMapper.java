@@ -1,19 +1,18 @@
 package com.neusoft.elmboot.mapper;
 
-import java.util.List;
+import com.neusoft.elmboot.model.entity.Business;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import com.neusoft.elmboot.po.Business;
+/**
+ * @author 14505
+ * @description 针对表【business】的数据库操作Mapper
+ * @createDate 2023-10-12 13:00:59
+ * @Entity com.neusoft.elmboot.po.Business
+ */
+public interface BusinessMapper extends BaseMapper<Business> {
 
-@Mapper
-public interface BusinessMapper {
-    @Select("select * from business where orderTypeId=#{orderTypeId} order by businessId")
-    public List<Business> listBusinessByOrderTypeId(Integer orderTypeId);
-
-    @Select("select * from business where businessId=#{businessId}")
-    public Business getBusinessById(Integer businessId);
-
-    @Select("SELECT * FROM business WHERE businessName LIKE CONCAT('%', #{businessName}, '%')")
-    List<Business> listBusinessByBusinessName(String businessName);
 }
+
+
+
+

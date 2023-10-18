@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="generator.mapper.OrderdetailetMapper">
+<mapper namespace="com.neusoft.elmboot.mapper.OrderdetailetMapper">
 
-    <resultMap id="BaseResultMap" type="generator.po.Orderdetailet">
+    <resultMap id="BaseResultMap" type="com.neusoft.elmboot.model.entity.Orderdetailet">
             <id property="odId" column="odId" jdbcType="INTEGER"/>
             <result property="orderId" column="orderId" jdbcType="INTEGER"/>
             <result property="foodId" column="foodId" jdbcType="INTEGER"/>

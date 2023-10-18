@@ -1,16 +1,18 @@
 package com.neusoft.elmboot.mapper;
 
-import java.util.List;
+import com.neusoft.elmboot.model.entity.Food;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import com.neusoft.elmboot.po.Food;
+/**
+* @author 14505
+* @description 针对表【food】的数据库操作Mapper
+* @createDate 2023-10-12 13:00:49
+* @Entity com.neusoft.elmboot.po.Food
+*/
+public interface FoodMapper extends BaseMapper<Food> {
 
-@Mapper
-public interface FoodMapper {
-    @Select("select * from food where businessId=#{businessId} order by foodId")
-    public List<Food> listFoodByBusinessId(Integer businessId);
-
-    @Select("select * from food where foodId=#{foodId}")
-    public Food getFoodById(Integer foodId);
 }
+
+
+
+

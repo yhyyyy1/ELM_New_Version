@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="generator.mapper.FoodMapper">
+<mapper namespace="com.neusoft.elmboot.mapper.FoodMapper">
 
-    <resultMap id="BaseResultMap" type="generator.po.Food">
+    <resultMap id="BaseResultMap" type="com.neusoft.elmboot.model.entity.Food">
             <id property="foodId" column="foodId" jdbcType="INTEGER"/>
             <result property="foodName" column="foodName" jdbcType="VARCHAR"/>
             <result property="foodExplain" column="foodExplain" jdbcType="VARCHAR"/>

@@ -1,15 +1,46 @@
 package com.neusoft.elmboot.service;
 
+import com.neusoft.elmboot.model.dto.cart.CartAddRequest;
+import com.neusoft.elmboot.model.dto.cart.CartEditRequest;
+import com.neusoft.elmboot.model.dto.cart.CartQueryRequest;
+import com.neusoft.elmboot.model.dto.cart.CartUpdateRequest;
+import com.neusoft.elmboot.model.entity.Cart;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.neusoft.elmboot.model.vo.CartVo;
+
 import java.util.List;
 
-import com.neusoft.elmboot.po.Cart;
+/**
+* @author 14505
+* @description 针对表【cart】的数据库操作Service
+* @createDate 2023-10-12 13:00:55
+*/
+public interface CartService extends IService<Cart> {
+    /**
+     * 列出购物车内容
+     * @param cartQueryRequest
+     * @return
+     */
+    List<CartVo> listCart(CartQueryRequest cartQueryRequest);
 
-public interface CartService {
-    public List<Cart> listCart(Cart cart);
+    /**
+     * 新建购物车
+     * @param cartAddRequest
+     * @return
+     */
+    int saveCart(CartAddRequest cartAddRequest);
 
-    public int saveCart(Cart cart);
+    /**
+     * 更新购物车
+     * @param cartUpdateRequest
+     * @return
+     */
+    int updateCart(CartUpdateRequest cartUpdateRequest);
 
-    public int updateCart(Cart cart);
-
-    public int removeCart(Cart cart);
+    /**
+     * 移除购物车
+     * @param cartEditRequest
+     * @return
+     */
+    int removeCart(CartEditRequest cartEditRequest);
 }

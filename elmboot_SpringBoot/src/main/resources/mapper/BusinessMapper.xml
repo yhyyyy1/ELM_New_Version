@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="generator.mapper.BusinessMapper">
+<mapper namespace="com.neusoft.elmboot.mapper.BusinessMapper">
 
-    <resultMap id="BaseResultMap" type="generator.po.Business">
+    <resultMap id="BaseResultMap" type="com.neusoft.elmboot.model.entity.Business">
             <id property="businessId" column="businessId" jdbcType="INTEGER"/>
             <result property="businessName" column="businessName" jdbcType="VARCHAR"/>
             <result property="businessAddress" column="businessAddress" jdbcType="VARCHAR"/>
