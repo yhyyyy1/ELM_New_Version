@@ -1,6 +1,8 @@
 package com.neusoft.elmboot.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.neusoft.elmboot.model.dto.orders.OrdersAddRequest;
+import com.neusoft.elmboot.model.dto.orders.OrdersQueryRequest;
 import com.neusoft.elmboot.model.entity.Orders;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.neusoft.elmboot.model.vo.OrdersVo;
@@ -9,14 +11,15 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
-* @author 14505
-* @description 针对表【orders】的数据库操作Service
-* @createDate 2023-10-12 13:00:40
-*/
+ * @author 14505
+ * @description 针对表【orders】的数据库操作Service
+ * @createDate 2023-10-12 13:00:40
+ */
 public interface OrdersService extends IService<Orders> {
 
     /**
      * 更新订单——更新订单金额 & 订单的积分使用
+     *
      * @param orderId
      * @param orderTotal
      * @return
@@ -25,6 +28,7 @@ public interface OrdersService extends IService<Orders> {
 
     /**
      * 更新订单——更新支付状态
+     *
      * @param orderId
      * @param orderState
      * @return
@@ -33,6 +37,7 @@ public interface OrdersService extends IService<Orders> {
 
     /**
      * 获得某个用户的所有订单
+     *
      * @param userId
      * @return
      */
@@ -40,6 +45,7 @@ public interface OrdersService extends IService<Orders> {
 
     /**
      * 根据订单ID获取订单信息
+     *
      * @param orderId
      * @return
      */
@@ -47,8 +53,17 @@ public interface OrdersService extends IService<Orders> {
 
     /**
      * 创建订单
+     *
      * @param ordersAddRequest
      * @return
      */
     int createOrders(OrdersAddRequest ordersAddRequest);
+
+    /**
+     * 实体对象封装操作类
+     *
+     * @param ordersQueryRequest
+     * @return
+     */
+    QueryWrapper<Orders> getQueryWrapper(OrdersQueryRequest ordersQueryRequest);
 }

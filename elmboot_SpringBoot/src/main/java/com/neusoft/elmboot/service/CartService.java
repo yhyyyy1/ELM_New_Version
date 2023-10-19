@@ -1,5 +1,6 @@
 package com.neusoft.elmboot.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.neusoft.elmboot.model.dto.cart.CartAddRequest;
 import com.neusoft.elmboot.model.dto.cart.CartEditRequest;
 import com.neusoft.elmboot.model.dto.cart.CartQueryRequest;
@@ -11,13 +12,14 @@ import com.neusoft.elmboot.model.vo.CartVo;
 import java.util.List;
 
 /**
-* @author 14505
-* @description 针对表【cart】的数据库操作Service
-* @createDate 2023-10-12 13:00:55
-*/
+ * @author 14505
+ * @description 针对表【cart】的数据库操作Service
+ * @createDate 2023-10-12 13:00:55
+ */
 public interface CartService extends IService<Cart> {
     /**
      * 列出购物车内容
+     *
      * @param cartQueryRequest
      * @return
      */
@@ -25,6 +27,7 @@ public interface CartService extends IService<Cart> {
 
     /**
      * 新建购物车
+     *
      * @param cartAddRequest
      * @return
      */
@@ -32,6 +35,7 @@ public interface CartService extends IService<Cart> {
 
     /**
      * 更新购物车
+     *
      * @param cartUpdateRequest
      * @return
      */
@@ -39,8 +43,17 @@ public interface CartService extends IService<Cart> {
 
     /**
      * 移除购物车
+     *
      * @param cartEditRequest
      * @return
      */
     int removeCart(CartEditRequest cartEditRequest);
+
+    /**
+     * 实体对象封装操作类
+     *
+     * @param cartQueryRequest
+     * @return
+     */
+    public QueryWrapper<Cart> getQueryWrapper(CartQueryRequest cartQueryRequest);
 }

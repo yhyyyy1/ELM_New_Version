@@ -1,5 +1,7 @@
 package com.neusoft.elmboot.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.neusoft.elmboot.model.dto.business.BusinessQueryRequest;
 import com.neusoft.elmboot.model.entity.Business;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.neusoft.elmboot.model.vo.BusinessVo;
@@ -35,4 +37,12 @@ public interface BusinessService extends IService<Business> {
      * @return
      */
     List<BusinessVo> listBusinessVoByBusinessName(String businessName);
+
+    /**
+     * 实体对象封装操作类
+     *
+     * @param businessQueryRequest
+     * @return
+     */
+    QueryWrapper<Business> getQueryWrapper(BusinessQueryRequest businessQueryRequest);
 }

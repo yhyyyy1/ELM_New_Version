@@ -1,6 +1,8 @@
 package com.neusoft.elmboot.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.neusoft.elmboot.model.dto.deliveryaddress.DAAddRequest;
+import com.neusoft.elmboot.model.dto.deliveryaddress.DAQueryRequest;
 import com.neusoft.elmboot.model.dto.deliveryaddress.DAUpdateRequest;
 import com.neusoft.elmboot.model.entity.DeliveryAddress;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -55,4 +57,12 @@ public interface DeliveryAddressService extends IService<DeliveryAddress> {
      * @return
      */
     int removeDeliveryAddress(Integer daId);
+
+    /**
+     * 实体对象封装操作类
+     *
+     * @param daQueryRequest
+     * @return
+     */
+    public QueryWrapper<DeliveryAddress> getQueryWrapper(DAQueryRequest daQueryRequest);
 }

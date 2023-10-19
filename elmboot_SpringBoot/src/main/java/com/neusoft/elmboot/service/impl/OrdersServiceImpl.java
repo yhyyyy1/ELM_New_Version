@@ -1,15 +1,24 @@
 package com.neusoft.elmboot.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.neusoft.elmboot.model.dto.orders.OrdersAddRequest;
+import com.neusoft.elmboot.model.dto.orders.OrdersQueryRequest;
 import com.neusoft.elmboot.model.entity.Orders;
 import com.neusoft.elmboot.model.vo.OrdersVo;
 import com.neusoft.elmboot.service.OrdersService;
 import com.neusoft.elmboot.mapper.OrdersMapper;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 /**
  * @author 14505
@@ -75,6 +84,36 @@ public class OrdersServiceImpl extends ServiceImpl<OrdersMapper, Orders>
     @Override
     public int createOrders(OrdersAddRequest ordersAddRequest) {
         return 0;
+    }
+
+    @Override
+    public QueryWrapper<Orders> getQueryWrapper(OrdersQueryRequest ordersQueryRequest) {
+        QueryWrapper<Orders> queryWrapper = new QueryWrapper<>();
+        if (ordersQueryRequest == null) {
+            return null;
+        }
+        Integer orderId = ordersQueryRequest.getOrderId();
+        String userId = ordersQueryRequest.getUserId();
+
+        queryWrapper.eq(ObjectUtils.isNotEmpty(orderId), "orderId", orderId);
+        queryWrapper.eq(StringUtils.isNotBlank(userId), "userId", userId);
+        return queryWrapper;
+    }
+
+    public OrdersVo getOrdersVo(Orders orders) {
+        if (orders == null) {
+            return null;
+        }
+        OrdersVo ordersVo = new OrdersVo();
+        BeanUtils.copyProperties(orders, ordersVo);
+        return ordersVo;
+    }
+
+    public List<OrdersVo> getOrdersVo(List<Orders> ordersList) {
+        if (CollectionUtils.isEmpty(ordersList)) {
+            return new ArrayList<>();
+        }
+        return ordersList.stream().map(this::getOrdersVo).collect(Collectors.toList());
     }
 }
 

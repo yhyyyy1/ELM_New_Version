@@ -16,6 +16,10 @@ public class CartQueryRequest implements Serializable {
      */
     private Integer businessId;
 
+    /**
+     * 食品编号
+     */
+    private Integer foodId;
 
     private static final long serialVersionUID = 1L;
 }

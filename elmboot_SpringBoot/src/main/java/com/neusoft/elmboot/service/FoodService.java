@@ -1,5 +1,7 @@
 package com.neusoft.elmboot.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.neusoft.elmboot.model.dto.food.FoodQueryRequest;
 import com.neusoft.elmboot.model.entity.Food;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.neusoft.elmboot.model.vo.FoodVo;
@@ -19,4 +21,11 @@ public interface FoodService extends IService<Food> {
      * @return
      */
     List<FoodVo> listFoodByBusinessId(Integer businessId);
+
+    /**
+     * 实体对象封装操作类
+     * @param foodQueryRequest
+     * @return
+     */
+    QueryWrapper<Food> getQueryWrapper(FoodQueryRequest foodQueryRequest);
 }

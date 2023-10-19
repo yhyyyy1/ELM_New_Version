@@ -1,7 +1,9 @@
 package com.neusoft.elmboot.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.neusoft.elmboot.model.dto.user.UserAddRequest;
 import com.neusoft.elmboot.model.dto.user.UserLoginRequest;
+import com.neusoft.elmboot.model.dto.user.UserQueryRequest;
 import com.neusoft.elmboot.model.dto.user.UserUpdateRequest;
 import com.neusoft.elmboot.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -53,4 +55,12 @@ public interface UserService extends IService<User> {
      * @return
      */
     double getPointById(String userId);
+
+    /**
+     * 实体对象封装操作类
+     *
+     * @param userQueryRequest
+     * @return
+     */
+    QueryWrapper<User> getQueryWraapper(UserQueryRequest userQueryRequest);
 }

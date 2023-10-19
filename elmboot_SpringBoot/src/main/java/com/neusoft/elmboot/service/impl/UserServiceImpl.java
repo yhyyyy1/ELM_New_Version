@@ -1,14 +1,25 @@
 package com.neusoft.elmboot.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.neusoft.elmboot.mapper.UserMapper;
 import com.neusoft.elmboot.model.dto.user.UserAddRequest;
 import com.neusoft.elmboot.model.dto.user.UserLoginRequest;
+import com.neusoft.elmboot.model.dto.user.UserQueryRequest;
 import com.neusoft.elmboot.model.dto.user.UserUpdateRequest;
 import com.neusoft.elmboot.model.entity.User;
+import com.neusoft.elmboot.model.entity.User;
+import com.neusoft.elmboot.model.vo.UserVo;
 import com.neusoft.elmboot.model.vo.UserVo;
 import com.neusoft.elmboot.service.UserService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author 14505
@@ -72,6 +83,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public double getPointById(String userId) {
         return 0;
+    }
+
+    @Override
+    public QueryWrapper<User> getQueryWraapper(UserQueryRequest userQueryRequest) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        if (userQueryRequest == null) {
+            return null;
+        }
+        String userId = userQueryRequest.getUserId();
+        queryWrapper.eq(StringUtils.isNotBlank(userId), "userId", userId);
+        return queryWrapper;
+    }
+
+    public UserVo getUserVo(User user) {
+        if (user == null) {
+            return null;
+        }
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(user, userVo);
+        return userVo;
     }
 }
 
