@@ -33,7 +33,11 @@ public class FoodServiceImpl extends ServiceImpl<FoodMapper, Food>
      */
     @Override
     public List<FoodVo> listFoodByBusinessId(Integer businessId) {
-        return null;
+        QueryWrapper<Food> queryWrapper = new QueryWrapper<Food>();
+        queryWrapper.eq("businessId", businessId);
+
+        List<Food> foodList = this.baseMapper.selectList(queryWrapper);
+        return getFoodVo(foodList);
     }
 
     /**

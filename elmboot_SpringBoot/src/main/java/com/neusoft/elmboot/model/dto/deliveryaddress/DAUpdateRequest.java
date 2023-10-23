@@ -7,6 +7,10 @@ import java.io.Serializable;
 @Data
 public class DAUpdateRequest implements Serializable {
     /**
+     * 送货地址编号
+     */
+    private Integer daId;
+    /**
      * 联系人姓名
      */
     private String contactName;
@@ -25,5 +29,10 @@ public class DAUpdateRequest implements Serializable {
      * 送货地址
      */
     private String address;
+
+    /**
+     * 所属用户编号
+     */
+    private String userId;
     private static final long serialVersionUID = 1L;
 }

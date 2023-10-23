@@ -18,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +31,9 @@ import java.util.stream.Collectors;
 @Service
 public class CartServiceImpl extends ServiceImpl<CartMapper, Cart>
         implements CartService {
+
+    @Resource
+    private CartMapper cartMapper;
 
     /**
      * 列出购物车内容
@@ -127,20 +131,28 @@ public class CartServiceImpl extends ServiceImpl<CartMapper, Cart>
         Integer businessId = cartEditRequest.getBusinessId();
         String userId = cartEditRequest.getUserId();
 
-        //先查询出对应的购物车
-        CartQueryRequest cartQueryRequest = new CartQueryRequest();
-        cartQueryRequest.setUserId(userId);
-        cartQueryRequest.setBusinessId(businessId);
-        cartQueryRequest.setFoodId(foodId);
-        Cart cart = getCart(cartQueryRequest);
-        if (cart == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "Could not find");
+        if (foodId == null) {
+            CartEditRequest cartEditRequestNew = new CartEditRequest();
+            cartEditRequestNew.setUserId(userId);
+            cartEditRequestNew.setBusinessId(businessId);
+            cartMapper.removeCartWithoutFood(cartEditRequestNew);
+            return 1;
+        } else {
+            //先查询出对应的购物车
+            CartQueryRequest cartQueryRequest = new CartQueryRequest();
+            cartQueryRequest.setUserId(userId);
+            cartQueryRequest.setBusinessId(businessId);
+            cartQueryRequest.setFoodId(foodId);
+            Cart cart = getCart(cartQueryRequest);
+            if (cart == null) {
+                throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "Could not find");
+            }
+            boolean result = this.removeById(cart);
+            if (!result) {
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "Update Database failed");
+            }
+            return 1;
         }
-        boolean result = this.removeById(cart);
-        if (!result) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "Update Database failed");
-        }
-        return 1;
     }
 
     public CartVo getCartVo(Cart cart) {

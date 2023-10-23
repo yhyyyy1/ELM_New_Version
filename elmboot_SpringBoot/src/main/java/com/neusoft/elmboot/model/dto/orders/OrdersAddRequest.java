@@ -10,9 +10,9 @@ import java.math.BigDecimal;
 @Data
 public class OrdersAddRequest implements Serializable {
     /**
-     * 订单编号
+     * 送货地址编号
      */
-    private Integer orderId;
+    private Integer daId;
 
     /**
      * 用户编号

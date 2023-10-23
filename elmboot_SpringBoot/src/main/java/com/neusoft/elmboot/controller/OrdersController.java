@@ -33,7 +33,7 @@ public class OrdersController {
      */
     @RequestMapping("/createOrders")
     public BaseResponse<Integer> createOrders(OrdersAddRequest ordersAddRequest) throws Exception {
-        if (ordersAddRequest.getOrderId() == null || ordersAddRequest.getUserId() == null ||
+        if (ordersAddRequest.getDaId() == null || ordersAddRequest.getUserId() == null ||
                 ordersAddRequest.getBusinessId() == null || ordersAddRequest.getOrderTotal() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }

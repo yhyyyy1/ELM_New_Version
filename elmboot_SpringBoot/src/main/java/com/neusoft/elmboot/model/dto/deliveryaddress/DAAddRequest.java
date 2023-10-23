@@ -26,5 +26,10 @@ public class DAAddRequest implements Serializable {
      * 送货地址
      */
     private String address;
+
+    /**
+     * 所属用户编号
+     */
+    private String userId;
     private static final long serialVersionUID = 1L;
 }

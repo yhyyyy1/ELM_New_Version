@@ -2,6 +2,8 @@ package com.neusoft.elmboot.mapper;
 
 import com.neusoft.elmboot.model.entity.Orders;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Options;
 
 /**
 * @author 14505
@@ -11,6 +13,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface OrdersMapper extends BaseMapper<Orders> {
 
+    @Insert("insert into orders(userId,businessId,orderDate,orderTotal,daId,orderState) values(#{userId},#{businessId},#{orderDate},#{orderTotal},#{daId},0)")
+    @Options(useGeneratedKeys = true, keyProperty = "orderId", keyColumn = "orderId")
+    public void saveOrders(Orders orders);
 }
 
 

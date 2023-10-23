@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.neusoft.elmboot.common.ErrorCode;
+import com.neusoft.elmboot.exception.BusinessException;
 import com.neusoft.elmboot.model.dto.deliveryaddress.DAAddRequest;
 import com.neusoft.elmboot.model.dto.deliveryaddress.DAQueryRequest;
 import com.neusoft.elmboot.model.dto.deliveryaddress.DAUpdateRequest;
@@ -38,7 +40,10 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryaddressMappe
      */
     @Override
     public List<DeliveryAddressVo> listDeliveryAddressByUserId(String userId) {
-        return null;
+        QueryWrapper<DeliveryAddress> queryWrapper = new QueryWrapper<DeliveryAddress>();
+        queryWrapper.eq("userId", userId);
+        List<DeliveryAddress> deliveryAddressList = this.baseMapper.selectList(queryWrapper);
+        return getDeliveryAddressVo(deliveryAddressList);
     }
 
     /**
@@ -49,7 +54,11 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryaddressMappe
      */
     @Override
     public DeliveryAddressVo getDeliveryAddressById(Integer daId) {
-        return null;
+        DeliveryAddress deliveryAddress = this.getById(daId);
+        if (deliveryAddress == null) {
+            return null;
+        }
+        return getDeliveryAddressVo(deliveryAddress);
     }
 
     /**
@@ -60,7 +69,18 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryaddressMappe
      */
     @Override
     public int saveDeliveryAddress(DAAddRequest daAddRequest) {
-        return 0;
+        DeliveryAddress deliveryAddress = new DeliveryAddress();
+        deliveryAddress.setContactName(daAddRequest.getContactName());
+        deliveryAddress.setContactSex(daAddRequest.getContactSex());
+        deliveryAddress.setContactTel(daAddRequest.getContactTel());
+        deliveryAddress.setAddress(daAddRequest.getAddress());
+        deliveryAddress.setUserId(daAddRequest.getUserId());
+
+        boolean result = this.save(deliveryAddress);
+        if (!result) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "create deliveryAddress error");
+        }
+        return 1;
     }
 
     /**
@@ -71,7 +91,20 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryaddressMappe
      */
     @Override
     public int updateDeliveryAddress(DAUpdateRequest daUpdateRequest) {
-        return 0;
+        DeliveryAddress deliveryAddress = new DeliveryAddress();
+
+        deliveryAddress.setDaId(daUpdateRequest.getDaId());
+        deliveryAddress.setContactName(daUpdateRequest.getContactName());
+        deliveryAddress.setContactSex(daUpdateRequest.getContactSex());
+        deliveryAddress.setContactTel(daUpdateRequest.getContactTel());
+        deliveryAddress.setAddress(daUpdateRequest.getAddress());
+        deliveryAddress.setUserId(daUpdateRequest.getUserId());
+
+        boolean result = this.updateById(deliveryAddress);
+        if (!result) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "Update Database failed");
+        }
+        return 1;
     }
 
     /**
@@ -82,7 +115,15 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryaddressMappe
      */
     @Override
     public int removeDeliveryAddress(Integer daId) {
-        return 0;
+        DeliveryAddress deliveryAddress = this.getById(daId);
+        if (deliveryAddress == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "Could not find");
+        }
+        boolean result = this.removeById(daId);
+        if (!result) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "Could not remove delivery address, database error");
+        }
+        return 1;
     }
 
     /**
@@ -105,8 +146,8 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryaddressMappe
         return queryWrapper;
     }
 
-    public DeliveryAddressVo getDeliveryAddressVo(DeliveryAddress deliveryAddress){
-        if(deliveryAddress == null){
+    public DeliveryAddressVo getDeliveryAddressVo(DeliveryAddress deliveryAddress) {
+        if (deliveryAddress == null) {
             return null;
         }
         DeliveryAddressVo deliveryAddressVo = new DeliveryAddressVo();
@@ -114,9 +155,8 @@ public class DeliveryAddressServiceImpl extends ServiceImpl<DeliveryaddressMappe
         return deliveryAddressVo;
     }
 
-    public List<DeliveryAddressVo> getDeliveryAddressVo(List<DeliveryAddress> deliveryAddressList){
-        if(CollectionUtils.isEmpty(deliveryAddressList))
-        {
+    public List<DeliveryAddressVo> getDeliveryAddressVo(List<DeliveryAddress> deliveryAddressList) {
+        if (CollectionUtils.isEmpty(deliveryAddressList)) {
             return new ArrayList<>();
         }
         return deliveryAddressList.stream().map(this::getDeliveryAddressVo).collect(Collectors.toList());

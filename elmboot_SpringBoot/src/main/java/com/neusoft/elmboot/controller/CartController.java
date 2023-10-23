@@ -87,7 +87,7 @@ public class CartController {
      */
     @RequestMapping("/removeCart")
     public BaseResponse<Integer> removeCart(CartEditRequest cartEditRequest) throws Exception {
-        if (cartEditRequest.getFoodId() == null || cartEditRequest.getUserId() == null || cartEditRequest.getBusinessId() == null) {
+        if (cartEditRequest.getUserId() == null || cartEditRequest.getBusinessId() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         Integer result = cartService.removeCart(cartEditRequest);

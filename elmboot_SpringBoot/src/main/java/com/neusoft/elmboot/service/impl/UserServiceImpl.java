@@ -3,6 +3,8 @@ package com.neusoft.elmboot.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.neusoft.elmboot.common.ErrorCode;
+import com.neusoft.elmboot.exception.BusinessException;
 import com.neusoft.elmboot.mapper.UserMapper;
 import com.neusoft.elmboot.model.dto.user.UserAddRequest;
 import com.neusoft.elmboot.model.dto.user.UserLoginRequest;
@@ -38,7 +40,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     @Override
     public UserVo getUserByIdByPass(UserLoginRequest userLoginRequest) {
-        return null;
+        QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
+        String userId = userLoginRequest.getUserId();
+        String password = userLoginRequest.getPassword();
+        queryWrapper.eq("userId", userId);
+        queryWrapper.eq("password", password);
+        User user = this.baseMapper.selectOne(queryWrapper);
+        return getUserVo(user);
     }
 
     /**
@@ -49,7 +57,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     @Override
     public int getUserById(String userId) {
-        return 0;
+        User user = this.baseMapper.selectById(userId);
+        if (user == null) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "User not found");
+        } else {
+            return 1;
+        }
     }
 
     /**
@@ -60,7 +73,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     @Override
     public int saveUser(UserAddRequest userAddRequest) {
-        return 0;
+        String userId = userAddRequest.getUserId();
+        String password = userAddRequest.getPassword();
+        String userName = userAddRequest.getUserName();
+        Integer userSex = userAddRequest.getUserSex();
+        String userImg = userAddRequest.getUserImg();
+
+        User user = new User();
+        user.setUserId(userId);
+        user.setPassword(password);
+        user.setUserName(userName);
+        user.setUserSex(userSex);
+        user.setUserImg(userImg);
+        user.setDelTag(1);
+        user.setPoint((double) 0);
+
+        boolean result = this.save(user);
+        if (!result) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "用户创建失败，数据库错误");
+        }
+        return 1;
     }
 
     /**
@@ -71,7 +103,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     @Override
     public int updatePoint(UserUpdateRequest userUpdateRequest) {
-        return 0;
+        String userId = userUpdateRequest.getUserId();
+        Double point = userUpdateRequest.getPoint();
+
+        User user = this.baseMapper.selectById(userId);
+        user.setPoint(point);
+        boolean result = this.updateById(user);
+        if (!result) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "Update Database failed");
+        }
+        return 1;
     }
 
     /**
@@ -82,7 +123,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
      */
     @Override
     public double getPointById(String userId) {
-        return 0;
+        User user = this.baseMapper.selectById(userId);
+        if (user == null) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "User not found");
+        } else {
+            return user.getPoint();
+        }
     }
 
     @Override
