@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * @description 针对表【business】的数据库操作Service实现
  * @createDate 2023-10-12 13:00:59
  */
-@Service
+@Service("businessService")
 @Slf4j
 public class BusinessServiceImpl extends ServiceImpl<BusinessMapper, Business>
         implements BusinessService {

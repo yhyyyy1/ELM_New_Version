@@ -9,6 +9,7 @@ import com.neusoft.elmboot.exception.BusinessException;
 import com.neusoft.elmboot.model.dto.business.BusinessQueryRequest;
 import com.neusoft.elmboot.model.entity.Business;
 import com.neusoft.elmboot.model.vo.BusinessVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.neusoft.elmboot.service.BusinessService;
@@ -17,6 +18,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/BusinessController")
+@Slf4j
 public class BusinessController {
 
     @Resource
