@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Options;
 * @author 14505
 * @description 针对表【orders】的数据库操作Mapper
 * @createDate 2023-10-12 13:00:40
-* @Entity com.neusoft.elmboot.po.Orders
+* @Entity com.neusoft.elmboot.model.entity.Orders
 */
 public interface OrdersMapper extends BaseMapper<Orders> {
 

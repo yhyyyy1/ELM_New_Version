@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Delete;
  * @author 14505
  * @description 针对表【cart】的数据库操作Mapper
  * @createDate 2023-10-12 13:00:55
- * @Entity com.neusoft.elmboot.po.Cart
+ * @Entity com.neusoft.elmboot.model.entity.Cart
  */
 public interface CartMapper extends BaseMapper<Cart> {
 
