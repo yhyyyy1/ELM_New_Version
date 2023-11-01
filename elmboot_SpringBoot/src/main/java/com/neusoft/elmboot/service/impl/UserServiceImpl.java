@@ -1,5 +1,7 @@
 package com.neusoft.elmboot.service.impl;
 
+import com.neusoft.elmboot.model.vo.UserVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -14,8 +16,18 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public User getUserByIdByPass(User user) {
-        return userMapper.getUserByIdByPass(user);
+    public UserVo getUserByIdByPass(User user) {
+        User user1 = userMapper.getUserByIdByPass(user);
+        return getUserVO(user1);
+    }
+
+    public UserVo getUserVO(User user) {
+        if (user == null) {
+            return null;
+        }
+        UserVo userVo = new UserVo();
+        BeanUtils.copyProperties(user, userVo);
+        return userVo;
     }
 
     @Override
@@ -32,6 +44,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.updatePoint(user);
     }
 
-    public double getPointById(String userId) { return userMapper.getPointById(userId);
+    public double getPointById(String userId) {
+        return userMapper.getPointById(userId);
     }
 }

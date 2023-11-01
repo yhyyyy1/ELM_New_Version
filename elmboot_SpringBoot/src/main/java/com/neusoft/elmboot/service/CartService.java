@@ -3,9 +3,10 @@ package com.neusoft.elmboot.service;
 import java.util.List;
 
 import com.neusoft.elmboot.model.po.Cart;
+import com.neusoft.elmboot.model.vo.CartVo;
 
 public interface CartService {
-    public List<Cart> listCart(Cart cart);
+    public List<CartVo> listCart(Cart cart);
 
     public int saveCart(Cart cart);
 

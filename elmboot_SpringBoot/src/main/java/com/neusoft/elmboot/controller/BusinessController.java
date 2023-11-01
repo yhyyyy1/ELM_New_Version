@@ -2,6 +2,9 @@ package com.neusoft.elmboot.controller;
 
 import java.util.List;
 
+import com.neusoft.elmboot.exception.BusinessException;
+import com.neusoft.elmboot.exception.ErrorCode;
+import com.neusoft.elmboot.model.vo.BusinessVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,17 +19,26 @@ public class BusinessController {
     private BusinessService businessService;
 
     @RequestMapping("/listBusinessByOrderTypeId")
-    public List<Business> listBusinessByOrderTypeId(Business business) throws Exception {
+    public List<BusinessVo> listBusinessByOrderTypeId(Business business) throws Exception {
+        if (business.getOrderTypeId() == null) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+        }
         return businessService.listBusinessByOrderTypeId(business.getOrderTypeId());
     }
 
     @RequestMapping("/getBusinessById")
-    public Business getBusinessById(Business business) throws Exception {
+    public BusinessVo getBusinessById(Business business) throws Exception {
+        if (business.getBusinessId() == null) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+        }
         return businessService.getBusinessById(business.getBusinessId());
     }
 
     @RequestMapping("/listBusinessByBusinessName")
-    public List<Business> listBusinessByBusinessName(Business business) throws Exception{
+    public List<BusinessVo> listBusinessByBusinessName(Business business) throws Exception {
+        if (business.getBusinessName() == null) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+        }
         return businessService.listBusinessByBusinessName(business.getBusinessName());
     }
 }
