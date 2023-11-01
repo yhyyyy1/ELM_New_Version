@@ -3,7 +3,7 @@ package com.neusoft.elmboot.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import com.neusoft.elmboot.po.OrderDetailet;
+import com.neusoft.elmboot.model.po.OrderDetailet;
 
 @Mapper
 public interface OrderDetailetMapper {

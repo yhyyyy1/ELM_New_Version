@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.neusoft.elmboot.mapper.FoodMapper;
-import com.neusoft.elmboot.po.Food;
+import com.neusoft.elmboot.model.po.Food;
 import com.neusoft.elmboot.service.FoodService;
 
 @Service

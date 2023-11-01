@@ -1,8 +1,11 @@
-package com.neusoft.elmboot.po;
+package com.neusoft.elmboot.model.vo;
+
+import com.neusoft.elmboot.model.po.Business;
+import com.neusoft.elmboot.model.po.OrderDetailet;
 
 import java.util.List;
 
-public class Orders {
+public class OrdersVo {
     private Integer orderId;
     private String userId;
     private Integer businessId;

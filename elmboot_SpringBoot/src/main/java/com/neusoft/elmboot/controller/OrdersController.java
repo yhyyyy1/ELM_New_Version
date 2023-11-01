@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.neusoft.elmboot.po.Orders;
+import com.neusoft.elmboot.model.po.Orders;
 import com.neusoft.elmboot.service.OrdersService;
 
 @RestController

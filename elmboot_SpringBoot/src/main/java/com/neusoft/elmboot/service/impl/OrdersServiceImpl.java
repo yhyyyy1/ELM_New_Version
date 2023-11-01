@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.neusoft.elmboot.mapper.CartMapper;
 import com.neusoft.elmboot.mapper.OrderDetailetMapper;
 import com.neusoft.elmboot.mapper.OrdersMapper;
-import com.neusoft.elmboot.po.Cart;
-import com.neusoft.elmboot.po.OrderDetailet;
-import com.neusoft.elmboot.po.Orders;
+import com.neusoft.elmboot.model.po.Cart;
+import com.neusoft.elmboot.model.po.OrderDetailet;
+import com.neusoft.elmboot.model.po.Orders;
 import com.neusoft.elmboot.service.OrdersService;
 import com.neusoft.elmboot.util.CommonUtil;
 

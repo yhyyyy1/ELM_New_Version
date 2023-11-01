@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 
-import com.neusoft.elmboot.po.Orders;
+import com.neusoft.elmboot.model.po.Orders;
 import org.apache.ibatis.annotations.Update;
 
 @Mapper

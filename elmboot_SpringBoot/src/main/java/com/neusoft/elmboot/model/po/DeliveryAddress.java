@@ -1,4 +1,4 @@
-package com.neusoft.elmboot.po;
+package com.neusoft.elmboot.model.po;
 
 public class DeliveryAddress {
     private Integer daId;

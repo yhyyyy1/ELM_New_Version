@@ -1,6 +1,8 @@
-package com.neusoft.elmboot.po;
+package com.neusoft.elmboot.model.vo;
 
-public class OrderDetailet {
+import com.neusoft.elmboot.model.po.Food;
+
+public class OrderDetailetVo {
     private Integer odId;
     private Integer orderId;
     private Integer foodId;

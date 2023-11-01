@@ -1,6 +1,6 @@
-package com.neusoft.elmboot.po;
+package com.neusoft.elmboot.model.vo;
 
-public class Business {
+public class BusinessVo {
     private Integer businessId;
     private String businessName;
     private String businessAddress;

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 import com.neusoft.elmboot.mapper.UserMapper;
-import com.neusoft.elmboot.po.User;
+import com.neusoft.elmboot.model.po.User;
 import com.neusoft.elmboot.service.UserService;
 
 @Service

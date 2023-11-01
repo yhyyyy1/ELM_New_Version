@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import com.neusoft.elmboot.po.Business;
+import com.neusoft.elmboot.model.po.Business;
 
 @Mapper
 public interface BusinessMapper {
