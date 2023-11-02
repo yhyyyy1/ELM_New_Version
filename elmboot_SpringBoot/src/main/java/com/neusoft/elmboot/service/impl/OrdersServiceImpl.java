@@ -2,7 +2,10 @@ package com.neusoft.elmboot.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.neusoft.elmboot.model.vo.OrdersVo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +17,7 @@ import com.neusoft.elmboot.model.po.OrderDetailet;
 import com.neusoft.elmboot.model.po.Orders;
 import com.neusoft.elmboot.service.OrdersService;
 import com.neusoft.elmboot.util.CommonUtil;
+import org.springframework.util.CollectionUtils;
 
 @Service
 public class OrdersServiceImpl implements OrdersService {
@@ -58,13 +62,15 @@ public class OrdersServiceImpl implements OrdersService {
     }
 
     @Override
-    public Orders getOrdersById(Integer orderId) {
-        return ordersMapper.getOrdersById(orderId);
+    public OrdersVo getOrdersById(Integer orderId) {
+        Orders orders = ordersMapper.getOrdersById(orderId);
+        return getOrdersVo(orders);
     }
 
     @Override
-    public List<Orders> listOrdersByUserId(String userId) {
-        return ordersMapper.listOrdersByUserId(userId);
+    public List<OrdersVo> listOrdersByUserId(String userId) {
+        List<Orders> ordersList = ordersMapper.listOrdersByUserId(userId);
+        return getOrdersVo(ordersList);
     }
 
     public int updateOrder(Integer orderId, Integer orderState) {
@@ -76,4 +82,20 @@ public class OrdersServiceImpl implements OrdersService {
         return ordersMapper.updateOrders(orderId, orderTotal);
     }
 
+    public OrdersVo getOrdersVo(Orders orders) {
+        if (orders == null) {
+            return null;
+        }
+        OrdersVo ordersVo = new OrdersVo();
+        BeanUtils.copyProperties(orders, ordersVo);
+        return ordersVo;
+    }
+
+
+    public List<OrdersVo> getOrdersVo(List<Orders> ordersList) {
+        if (CollectionUtils.isEmpty(ordersList)) {
+            return new ArrayList<>();
+        }
+        return ordersList.stream().map(this::getOrdersVo).collect(Collectors.toList());
+    }
 }

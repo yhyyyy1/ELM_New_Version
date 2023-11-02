@@ -41,4 +41,6 @@ public class BusinessController {
         }
         return businessService.listBusinessByBusinessName(business.getBusinessName());
     }
+
+
 }

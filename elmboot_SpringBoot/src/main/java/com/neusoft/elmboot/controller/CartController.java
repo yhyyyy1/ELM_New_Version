@@ -28,7 +28,7 @@ public class CartController {
 
     @RequestMapping("/saveCart")
     public int saveCart(Cart cart) throws Exception {
-        if (cart.getUserId() == null || cart.getBusinessId() == null ||cart.getFoodId() == null) {
+        if (cart.getUserId() == null || cart.getBusinessId() == null || cart.getFoodId() == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         }
         return cartService.saveCart(cart);
@@ -36,7 +36,7 @@ public class CartController {
 
     @RequestMapping("/updateCart")
     public int updateCart(Cart cart) throws Exception {
-        if(){
+        if (cart.getBusinessId() == null || cart.getFoodId() == null || cart.getUserId() == null || cart.getQuantity() == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         }
         return cartService.updateCart(cart);
@@ -45,7 +45,7 @@ public class CartController {
     @RequestMapping("/removeCart")
 
     public int removeCart(Cart cart) throws Exception {
-        if(){
+        if (cart.getBusinessId() == null || cart.getFoodId() == null || cart.getUserId() == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         }
         return cartService.removeCart(cart);

@@ -3,13 +3,14 @@ package com.neusoft.elmboot.service;
 import java.util.List;
 
 import com.neusoft.elmboot.model.po.Orders;
+import com.neusoft.elmboot.model.vo.OrdersVo;
 
 public interface OrdersService {
     public int createOrders(Orders orders);
 
-    public Orders getOrdersById(Integer orderId);
+    public OrdersVo getOrdersById(Integer orderId);
 
-    public List<Orders> listOrdersByUserId(String userId);
+    public List<OrdersVo> listOrdersByUserId(String userId);
 
     public int updateOrder(Integer orderId, Integer orderState);
 
