@@ -2,7 +2,6 @@ package com.neusoft.elmboot.service;
 
 import java.util.List;
 
-import com.neusoft.elmboot.model.po.Business;
 import com.neusoft.elmboot.model.vo.BusinessVo;
 
 public interface BusinessService {

@@ -2,7 +2,7 @@ package com.neusoft.elmboot.service;
 
 import java.util.List;
 
-import com.neusoft.elmboot.model.po.Cart;
+import com.neusoft.elmboot.model.bo.Cart;
 import com.neusoft.elmboot.model.vo.CartVo;
 
 public interface CartService {

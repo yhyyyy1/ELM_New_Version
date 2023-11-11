@@ -1,9 +1,11 @@
-package com.neusoft.elmboot.model.vo;
+package com.neusoft.elmboot.model.bo;
+
 import lombok.Data;
 
 @Data
-public class UserVo {
+public class User {
     private String userId;
+    private String password;
     private String userName;
     private Integer userSex;
     private String userImg;

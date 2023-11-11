@@ -1,8 +1,9 @@
-package com.neusoft.elmboot.model.vo;
+package com.neusoft.elmboot.model.bo;
+
 import lombok.Data;
 
 @Data
-public class FoodVo {
+public class Food {
     private Integer foodId;
     private String foodName;
     private String foodExplain;

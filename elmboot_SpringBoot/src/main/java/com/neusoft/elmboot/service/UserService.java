@@ -1,6 +1,6 @@
 package com.neusoft.elmboot.service;
 
-import com.neusoft.elmboot.model.po.User;
+import com.neusoft.elmboot.model.bo.User;
 import com.neusoft.elmboot.model.vo.UserVo;
 
 public interface UserService {

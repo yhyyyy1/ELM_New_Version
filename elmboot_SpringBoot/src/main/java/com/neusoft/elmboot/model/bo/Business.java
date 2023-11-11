@@ -1,9 +1,9 @@
-package com.neusoft.elmboot.model.vo;
+package com.neusoft.elmboot.model.bo;
 
 import lombok.Data;
 
 @Data
-public class BusinessVo {
+public class Business {
     private Integer businessId;
     private String businessName;
     private String businessAddress;

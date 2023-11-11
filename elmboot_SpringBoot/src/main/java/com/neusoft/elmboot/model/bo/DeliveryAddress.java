@@ -1,14 +1,13 @@
-package com.neusoft.elmboot.model.vo;
+package com.neusoft.elmboot.model.bo;
+
 import lombok.Data;
 
 @Data
-public class DeliveryAddressVo {
+public class DeliveryAddress {
     private Integer daId;
     private String contactName;
     private Integer contactSex;
     private String contactTel;
     private String address;
     private String userId;
-
-
 }

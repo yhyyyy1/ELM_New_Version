@@ -1,9 +1,7 @@
 package com.neusoft.elmboot.service.impl;
 
 import com.neusoft.elmboot.mapper.FoodMapper;
-import com.neusoft.elmboot.model.po.Business;
-import com.neusoft.elmboot.model.po.Food;
-import com.neusoft.elmboot.model.vo.BusinessVo;
+import com.neusoft.elmboot.model.bo.Food;
 import com.neusoft.elmboot.model.vo.FoodVo;
 import com.neusoft.elmboot.service.FoodService;
 import org.springframework.beans.BeanUtils;

@@ -3,7 +3,7 @@ package com.neusoft.elmboot.mapper;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import com.neusoft.elmboot.model.po.User;
+import com.neusoft.elmboot.model.bo.User;
 import org.apache.ibatis.annotations.Update;
 
 @Mapper

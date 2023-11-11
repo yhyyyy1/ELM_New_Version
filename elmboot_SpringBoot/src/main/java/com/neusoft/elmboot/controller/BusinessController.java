@@ -2,13 +2,15 @@ package com.neusoft.elmboot.controller;
 
 import java.util.List;
 
+import com.neusoft.elmboot.common.BaseResponse;
+import com.neusoft.elmboot.common.ResultUtils;
 import com.neusoft.elmboot.exception.BusinessException;
-import com.neusoft.elmboot.exception.ErrorCode;
+import com.neusoft.elmboot.common.ErrorCode;
 import com.neusoft.elmboot.model.vo.BusinessVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.neusoft.elmboot.model.po.Business;
+import com.neusoft.elmboot.model.bo.Business;
 import com.neusoft.elmboot.service.BusinessService;
 
 @RestController
@@ -19,27 +21,30 @@ public class BusinessController {
     private BusinessService businessService;
 
     @RequestMapping("/listBusinessByOrderTypeId")
-    public List<BusinessVo> listBusinessByOrderTypeId(Business business) throws Exception {
+    public BaseResponse<List<BusinessVo>> listBusinessByOrderTypeId(Business business) throws Exception {
         if (business.getOrderTypeId() == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         }
-        return businessService.listBusinessByOrderTypeId(business.getOrderTypeId());
+        List<BusinessVo> businessVoList = businessService.listBusinessByOrderTypeId(business.getOrderTypeId());
+        return ResultUtils.success(businessVoList);
     }
 
     @RequestMapping("/getBusinessById")
-    public BusinessVo getBusinessById(Business business) throws Exception {
+    public BaseResponse<BusinessVo> getBusinessById(Business business) throws Exception {
         if (business.getBusinessId() == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         }
-        return businessService.getBusinessById(business.getBusinessId());
+        BusinessVo businessVo = businessService.getBusinessById(business.getBusinessId());
+        return ResultUtils.success(businessVo);
     }
 
     @RequestMapping("/listBusinessByBusinessName")
-    public List<BusinessVo> listBusinessByBusinessName(Business business) throws Exception {
+    public BaseResponse<List<BusinessVo>> listBusinessByBusinessName(Business business) throws Exception {
         if (business.getBusinessName() == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         }
-        return businessService.listBusinessByBusinessName(business.getBusinessName());
+        List<BusinessVo> businessVoList = businessService.listBusinessByBusinessName(business.getBusinessName());
+        return ResultUtils.success(businessVoList);
     }
 
 

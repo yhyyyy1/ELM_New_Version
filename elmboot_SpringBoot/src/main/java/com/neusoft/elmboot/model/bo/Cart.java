@@ -1,9 +1,9 @@
-package com.neusoft.elmboot.model.vo;
+package com.neusoft.elmboot.model.bo;
 
 import lombok.Data;
 
 @Data
-public class CartVo {
+public class Cart {
     private Integer cartId;
     private Integer foodId;
     private Integer businessId;
@@ -11,7 +11,7 @@ public class CartVo {
     private Integer quantity;
 
     //多对一：所属食品
-    private FoodVo foodVo;
+    private Food food;
     //多对一：所属商家
-    private BusinessVo businessVo;
+    private Business business;
 }

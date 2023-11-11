@@ -9,7 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.neusoft.elmboot.mapper.BusinessMapper;
-import com.neusoft.elmboot.model.po.Business;
+import com.neusoft.elmboot.model.bo.Business;
 import com.neusoft.elmboot.service.BusinessService;
 import org.springframework.util.CollectionUtils;
 

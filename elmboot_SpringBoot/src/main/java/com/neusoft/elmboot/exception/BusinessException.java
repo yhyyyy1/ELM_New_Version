@@ -1,5 +1,7 @@
 package com.neusoft.elmboot.exception;
 
+import com.neusoft.elmboot.common.ErrorCode;
+
 public class BusinessException extends RuntimeException {
     private final int code;
 

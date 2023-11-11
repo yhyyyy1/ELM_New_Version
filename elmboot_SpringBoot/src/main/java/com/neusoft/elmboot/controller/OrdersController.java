@@ -2,13 +2,15 @@ package com.neusoft.elmboot.controller;
 
 import java.util.List;
 
+import com.neusoft.elmboot.common.BaseResponse;
+import com.neusoft.elmboot.common.ResultUtils;
 import com.neusoft.elmboot.exception.BusinessException;
-import com.neusoft.elmboot.exception.ErrorCode;
+import com.neusoft.elmboot.common.ErrorCode;
 import com.neusoft.elmboot.model.vo.OrdersVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.neusoft.elmboot.model.po.Orders;
+import com.neusoft.elmboot.model.bo.Orders;
 import com.neusoft.elmboot.service.OrdersService;
 
 @RestController
@@ -18,42 +20,47 @@ public class OrdersController {
     private OrdersService ordersService;
 
     @RequestMapping("/createOrders")
-    public int createOrders(Orders orders) throws Exception {
+    public BaseResponse<Integer> createOrders(Orders orders) throws Exception {
         if (orders.getUserId() == null || orders.getBusinessId() == null || orders.getDaId() == null || orders.getOrderTotal() == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         }
-        return ordersService.createOrders(orders);
+        Integer result = ordersService.createOrders(orders);
+        return ResultUtils.success(result);
     }
 
     @RequestMapping("/getOrdersById")
-    public OrdersVo getOrdersById(Orders orders) throws Exception {
+    public BaseResponse<OrdersVo> getOrdersById(Orders orders) throws Exception {
         if (orders.getOrderId() == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         }
-        return ordersService.getOrdersById(orders.getOrderId());
+        OrdersVo ordersVo = ordersService.getOrdersById(orders.getOrderId());
+        return ResultUtils.success(ordersVo);
     }
 
     @RequestMapping("/listOrdersByUserId")
-    public List<OrdersVo> listOrdersByUserId(Orders orders) throws Exception {
+    public BaseResponse<List<OrdersVo>> listOrdersByUserId(Orders orders) throws Exception {
         if (orders.getUserId() == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         }
-        return ordersService.listOrdersByUserId(orders.getUserId());
+        List<OrdersVo> ordersVoList = ordersService.listOrdersByUserId(orders.getUserId());
+        return ResultUtils.success(ordersVoList);
     }
 
     @RequestMapping("/updateOrder")
-    public int updateOrder(Orders orders) throws Exception {
+    public BaseResponse<Integer> updateOrder(Orders orders) throws Exception {
         if (orders.getUserId() == null || orders.getOrderState() == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         }
-        return ordersService.updateOrder(orders.getOrderId(), orders.getOrderState());
+        Integer result = ordersService.updateOrder(orders.getOrderId(), orders.getOrderState());
+        return ResultUtils.success(result);
     }
 
     @RequestMapping("/updateOrders")
-    public int updateOrders(Orders orders) throws Exception {
+    public BaseResponse<Integer> updateOrders(Orders orders) throws Exception {
         if (orders.getUserId() == null || orders.getOrderTotal() == null) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR);
         }
-        return ordersService.updateOrders(orders.getOrderId(), orders.getOrderTotal());
+        Integer result = ordersService.updateOrders(orders.getOrderId(), orders.getOrderTotal());
+        return ResultUtils.success(result);
     }
 }

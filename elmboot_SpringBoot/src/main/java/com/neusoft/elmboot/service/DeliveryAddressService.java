@@ -2,7 +2,7 @@ package com.neusoft.elmboot.service;
 
 import java.util.List;
 
-import com.neusoft.elmboot.model.po.DeliveryAddress;
+import com.neusoft.elmboot.model.bo.DeliveryAddress;
 import com.neusoft.elmboot.model.vo.DeliveryAddressVo;
 
 public interface DeliveryAddressService {

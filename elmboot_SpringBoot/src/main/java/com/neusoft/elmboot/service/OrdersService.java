@@ -2,7 +2,7 @@ package com.neusoft.elmboot.service;
 
 import java.util.List;
 
-import com.neusoft.elmboot.model.po.Orders;
+import com.neusoft.elmboot.model.bo.Orders;
 import com.neusoft.elmboot.model.vo.OrdersVo;
 
 public interface OrdersService {

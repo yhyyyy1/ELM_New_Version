@@ -1,4 +1,4 @@
-package com.neusoft.elmboot.exception;
+package com.neusoft.elmboot.common;
 
 /**
  * 自定义错误码

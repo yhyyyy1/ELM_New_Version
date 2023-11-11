@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
-import com.neusoft.elmboot.model.po.DeliveryAddress;
+import com.neusoft.elmboot.model.bo.DeliveryAddress;
 
 @Mapper
 public interface DeliveryAddressMapper {

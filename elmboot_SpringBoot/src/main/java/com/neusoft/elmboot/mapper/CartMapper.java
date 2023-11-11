@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
-import com.neusoft.elmboot.model.po.Cart;
+import com.neusoft.elmboot.model.bo.Cart;
 
 @Mapper
 public interface CartMapper {
