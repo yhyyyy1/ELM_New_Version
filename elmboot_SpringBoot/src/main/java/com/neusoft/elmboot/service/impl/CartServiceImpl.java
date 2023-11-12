@@ -47,6 +47,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public int removeCart(Cart cart) {
         try {
+            // 最底层的 不用变
             return cartMapper.removeCart(cart);
         } catch (SQLException e) {
             throw new RuntimeException(e);
