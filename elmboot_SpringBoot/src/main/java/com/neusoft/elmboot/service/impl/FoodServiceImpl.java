@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,8 +22,13 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public List<FoodVo> listFoodByBusinessId(Integer businessId) {
-        List<Food> foodList = foodMapper.listFoodByBusinessId(businessId);
-        return getFoodVo(foodList);
+        try {
+            List<Food> foodList = foodMapper.listFoodByBusinessId(businessId);
+            return getFoodVo(foodList);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public FoodVo getFoodVo(Food food) {

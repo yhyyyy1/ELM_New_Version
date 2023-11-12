@@ -1,5 +1,6 @@
 package com.neusoft.elmboot.service.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,20 +22,32 @@ public class BusinessServiceImpl implements BusinessService {
 
     @Override
     public List<BusinessVo> listBusinessByOrderTypeId(Integer orderTypeId) {
-        List<Business> businessList = businessMapper.listBusinessByOrderTypeId(orderTypeId);
-        return getBusinessVo(businessList);
+        try {
+            List<Business> businessList = businessMapper.listBusinessByOrderTypeId(orderTypeId);
+            return getBusinessVo(businessList);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public BusinessVo getBusinessById(Integer businessId) {
-        Business business = businessMapper.getBusinessById(businessId);
-        return getBusinessVo(business);
+        try {
+            Business business = businessMapper.getBusinessById(businessId);
+            return getBusinessVo(business);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public List<BusinessVo> listBusinessByBusinessName(String businessName) {
-        List<Business> businessList = businessMapper.listBusinessByBusinessName(businessName);
-        return getBusinessVo(businessList);
+        try {
+            List<Business> businessList = businessMapper.listBusinessByBusinessName(businessName);
+            return getBusinessVo(businessList);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

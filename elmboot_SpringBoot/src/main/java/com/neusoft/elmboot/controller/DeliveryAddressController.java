@@ -23,46 +23,85 @@ public class DeliveryAddressController {
     public BaseResponse<List<DeliveryAddressVo>> listDeliveryAddressByUserId(DeliveryAddress deliveryAddress)
             throws Exception {
         if (deliveryAddress.getUserId() == null) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
         List<DeliveryAddressVo> deliveryAddressVoList = deliveryAddressService.listDeliveryAddressByUserId(deliveryAddress.getUserId());
-        return ResultUtils.success(deliveryAddressVoList);
+        if (deliveryAddressVoList != null) {
+            return ResultUtils.success(deliveryAddressVoList);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，获取当前用户配送地址列表失败");
+        }
+
     }
 
     @RequestMapping("/getDeliveryAddressById")
     public BaseResponse<DeliveryAddressVo> getDeliveryAddressById(DeliveryAddress deliveryAddress) throws
             Exception {
         if (deliveryAddress.getDaId() == null) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
         DeliveryAddressVo deliveryAddressVo = deliveryAddressService.getDeliveryAddressById(deliveryAddress.getDaId());
-        return ResultUtils.success(deliveryAddressVo);
+        if (deliveryAddressVo != null) {
+            return ResultUtils.success(deliveryAddressVo);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，获取当前用户的某个配送地址失败");
+        }
     }
 
     @RequestMapping("/saveDeliveryAddress")
     public BaseResponse<Integer> saveDeliveryAddress(DeliveryAddress deliveryAddress) throws Exception {
         if (deliveryAddress.getContactName() == null || deliveryAddress.getContactSex() == null || deliveryAddress.getContactTel() == null || deliveryAddress.getAddress() == null) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
+        }
+        if (deliveryAddress.getContactSex() != 1 && deliveryAddress.getContactSex() != 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "性别参数应该为1 or 0");
+        }
+        if (deliveryAddress.getContactTel().length() != 11) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "联系电话应该为11位");
+        }
+        if (deliveryAddress.getContactTel().charAt(0) != '0' && deliveryAddress.getContactTel().charAt(0) != '1') {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "联系电话应该以1 或 0开头");
         }
         Integer result = deliveryAddressService.saveDeliveryAddress(deliveryAddress);
-        return ResultUtils.success(result);
+        if (result.equals(1)) {
+            return ResultUtils.success(result);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，新建配送地址失败");
+        }
     }
 
     @RequestMapping("/updateDeliveryAddress")
     public BaseResponse<Integer> updateDeliveryAddress(DeliveryAddress deliveryAddress) throws Exception {
         if (deliveryAddress.getContactName() == null || deliveryAddress.getContactSex() == null || deliveryAddress.getContactTel() == null || deliveryAddress.getAddress() == null) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
+        }
+        if (deliveryAddress.getContactSex() != 1 && deliveryAddress.getContactSex() != 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "性别参数应该为1 or 0");
+        }
+        if (deliveryAddress.getContactTel().length() != 11) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "联系电话应该为11位");
+        }
+        if (deliveryAddress.getContactTel().charAt(0) != '0' && deliveryAddress.getContactTel().charAt(0) != '1') {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "联系电话应该以1 或 0开头");
         }
         Integer result = deliveryAddressService.updateDeliveryAddress(deliveryAddress);
-        return ResultUtils.success(result);
+        if (result.equals(1)) {
+            return ResultUtils.success(result);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，更新配送地址失败");
+        }
     }
 
     @RequestMapping("/removeDeliveryAddress")
     public BaseResponse<Integer> removeDeliveryAddress(DeliveryAddress deliveryAddress) throws Exception {
         if (deliveryAddress.getDaId() == null) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
         Integer result = deliveryAddressService.removeDeliveryAddress(deliveryAddress.getDaId());
-        return ResultUtils.success(result);
+        if (result.equals(1)) {
+            return ResultUtils.success(result);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，移除配送地址失败");
+        }
     }
 }

@@ -23,28 +23,41 @@ public class BusinessController {
     @RequestMapping("/listBusinessByOrderTypeId")
     public BaseResponse<List<BusinessVo>> listBusinessByOrderTypeId(Business business) throws Exception {
         if (business.getOrderTypeId() == null) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
         List<BusinessVo> businessVoList = businessService.listBusinessByOrderTypeId(business.getOrderTypeId());
-        return ResultUtils.success(businessVoList);
+        if (businessVoList != null) {
+            return ResultUtils.success(businessVoList);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，获取商家列表失败");
+        }
+
     }
 
     @RequestMapping("/getBusinessById")
     public BaseResponse<BusinessVo> getBusinessById(Business business) throws Exception {
         if (business.getBusinessId() == null) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
         BusinessVo businessVo = businessService.getBusinessById(business.getBusinessId());
-        return ResultUtils.success(businessVo);
+        if (businessVo != null) {
+            return ResultUtils.success(businessVo);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，获取商家失败");
+        }
     }
 
     @RequestMapping("/listBusinessByBusinessName")
     public BaseResponse<List<BusinessVo>> listBusinessByBusinessName(Business business) throws Exception {
         if (business.getBusinessName() == null) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
         List<BusinessVo> businessVoList = businessService.listBusinessByBusinessName(business.getBusinessName());
-        return ResultUtils.success(businessVoList);
+        if (businessVoList != null) {
+            return ResultUtils.success(businessVoList);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，查询商家列表失败");
+        }
     }
 
 

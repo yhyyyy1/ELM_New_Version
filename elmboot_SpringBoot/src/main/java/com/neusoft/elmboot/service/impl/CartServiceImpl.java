@@ -1,5 +1,6 @@
 package com.neusoft.elmboot.service.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,17 +28,29 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public int saveCart(Cart cart) {
-        return cartMapper.saveCart(cart);
+        try {
+            return cartMapper.saveCart(cart);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public int updateCart(Cart cart) {
-        return cartMapper.updateCart(cart);
+        try {
+            return cartMapper.updateCart(cart);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public int removeCart(Cart cart) {
-        return cartMapper.removeCart(cart);
+        try {
+            return cartMapper.removeCart(cart);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public CartVo getCartVo(Cart cart) {

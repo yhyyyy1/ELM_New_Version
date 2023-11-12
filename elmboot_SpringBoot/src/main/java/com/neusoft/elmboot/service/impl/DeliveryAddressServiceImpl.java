@@ -1,5 +1,6 @@
 package com.neusoft.elmboot.service.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,30 +22,52 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService {
 
     @Override
     public List<DeliveryAddressVo> listDeliveryAddressByUserId(String userId) {
-        List<DeliveryAddress> deliveryAddressList = deliveryAddressMapper.listDeliveryAddressByUserId(userId);
-        return getDeliveryAddressVo(deliveryAddressList);
+        try {
+            List<DeliveryAddress> deliveryAddressList = deliveryAddressMapper.listDeliveryAddressByUserId(userId);
+            return getDeliveryAddressVo(deliveryAddressList);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
     public DeliveryAddressVo getDeliveryAddressById(Integer daId) {
-        DeliveryAddress deliveryAddress = deliveryAddressMapper.getDeliveryAddressById(daId);
-        return getDeliveryAddressVo(deliveryAddress);
+        try {
+            DeliveryAddress deliveryAddress = deliveryAddressMapper.getDeliveryAddressById(daId);
+            return getDeliveryAddressVo(deliveryAddress);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     @Override
     public int saveDeliveryAddress(DeliveryAddress deliveryAddress) {
-        return deliveryAddressMapper.saveDeliveryAddress(deliveryAddress);
+        try {
+            return deliveryAddressMapper.saveDeliveryAddress(deliveryAddress);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
     @Override
     public int updateDeliveryAddress(DeliveryAddress deliveryAddress) {
-        return deliveryAddressMapper.updateDeliveryAddress(deliveryAddress);
+        try {
+            return deliveryAddressMapper.updateDeliveryAddress(deliveryAddress);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public int removeDeliveryAddress(Integer daId) {
-        return deliveryAddressMapper.removeDeliveryAddress(daId);
+        try {
+            return deliveryAddressMapper.removeDeliveryAddress(daId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public DeliveryAddressVo getDeliveryAddressVo(DeliveryAddress deliveryAddress) {

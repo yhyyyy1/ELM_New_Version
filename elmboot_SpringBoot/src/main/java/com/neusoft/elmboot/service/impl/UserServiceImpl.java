@@ -9,6 +9,8 @@ import com.neusoft.elmboot.mapper.UserMapper;
 import com.neusoft.elmboot.model.bo.User;
 import com.neusoft.elmboot.service.UserService;
 
+import java.sql.SQLException;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -17,8 +19,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserVo getUserByIdByPass(User user) {
-        User user1 = userMapper.getUserByIdByPass(user);
-        return getUserVO(user1);
+        try {
+            User user1 = userMapper.getUserByIdByPass(user);
+            return getUserVO(user1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public UserVo getUserVO(User user) {
@@ -32,19 +38,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public int getUserById(String userId) {
-        return userMapper.getUserById(userId);
+        try {
+            return userMapper.getUserById(userId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public int saveUser(User user) {
-        return userMapper.saveUser(user);
+        try {
+            return userMapper.saveUser(user);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public int updatePoint(User user) {
-        return userMapper.updatePoint(user);
+        try {
+            return userMapper.updatePoint(user);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public double getPointById(String userId) {
-        return userMapper.getPointById(userId);
+        try {
+            return userMapper.getPointById(userId);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

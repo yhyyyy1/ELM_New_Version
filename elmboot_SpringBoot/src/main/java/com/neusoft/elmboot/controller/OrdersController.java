@@ -22,45 +22,71 @@ public class OrdersController {
     @RequestMapping("/createOrders")
     public BaseResponse<Integer> createOrders(Orders orders) throws Exception {
         if (orders.getUserId() == null || orders.getBusinessId() == null || orders.getDaId() == null || orders.getOrderTotal() == null) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
+        }
+        if (orders.getOrderTotal() < 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "订单总支付价格不能小于零");
         }
         Integer result = ordersService.createOrders(orders);
-        return ResultUtils.success(result);
+        if (result.equals(1)) {
+            return ResultUtils.success(result);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，新增订单失败");
+        }
     }
 
     @RequestMapping("/getOrdersById")
     public BaseResponse<OrdersVo> getOrdersById(Orders orders) throws Exception {
         if (orders.getOrderId() == null) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
         OrdersVo ordersVo = ordersService.getOrdersById(orders.getOrderId());
-        return ResultUtils.success(ordersVo);
+        if (ordersVo != null) {
+            return ResultUtils.success(ordersVo);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，获取订单失败");
+        }
     }
 
     @RequestMapping("/listOrdersByUserId")
     public BaseResponse<List<OrdersVo>> listOrdersByUserId(Orders orders) throws Exception {
         if (orders.getUserId() == null) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
         List<OrdersVo> ordersVoList = ordersService.listOrdersByUserId(orders.getUserId());
-        return ResultUtils.success(ordersVoList);
+        if (ordersVoList != null) {
+            return ResultUtils.success(ordersVoList);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，获取用户订单列表失败");
+        }
     }
 
     @RequestMapping("/updateOrder")
     public BaseResponse<Integer> updateOrder(Orders orders) throws Exception {
         if (orders.getUserId() == null || orders.getOrderState() == null) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
         Integer result = ordersService.updateOrder(orders.getOrderId(), orders.getOrderState());
-        return ResultUtils.success(result);
+        if (result.equals(1)) {
+            return ResultUtils.success(result);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，更新订单支付状态失败");
+        }
     }
 
     @RequestMapping("/updateOrders")
     public BaseResponse<Integer> updateOrders(Orders orders) throws Exception {
         if (orders.getUserId() == null || orders.getOrderTotal() == null) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
+        }
+        if (orders.getOrderTotal() < 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "订单总支付价格不能小于零");
         }
         Integer result = ordersService.updateOrders(orders.getOrderId(), orders.getOrderTotal());
-        return ResultUtils.success(result);
+        if (result.equals(1)) {
+            return ResultUtils.success(result);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，更新订单支付价格（因为更新了积分使用）失败");
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.neusoft.elmboot.service.impl;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,7 +42,11 @@ public class OrdersServiceImpl implements OrdersService {
 
         //2、创建订单（返回生成的订单编号）
         orders.setOrderDate(CommonUtil.getCurrentDate());
-        ordersMapper.saveOrders(orders);
+        try {
+            ordersMapper.saveOrders(orders);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         int orderId = orders.getOrderId();
 
         //3、批量添加订单明细
@@ -53,33 +58,57 @@ public class OrdersServiceImpl implements OrdersService {
             od.setQuantity(c.getQuantity());
             list.add(od);
         }
-        orderDetailetMapper.saveOrderDetailetBatch(list);
+        try {
+            orderDetailetMapper.saveOrderDetailetBatch(list);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         //4、从购物车表中删除相关食品信息
-        cartMapper.removeCart(cart);
+        try {
+            cartMapper.removeCart(cart);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         return orderId;
     }
 
     @Override
     public OrdersVo getOrdersById(Integer orderId) {
-        Orders orders = ordersMapper.getOrdersById(orderId);
-        return getOrdersVo(orders);
+        try {
+            Orders orders = ordersMapper.getOrdersById(orderId);
+            return getOrdersVo(orders);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public List<OrdersVo> listOrdersByUserId(String userId) {
-        List<Orders> ordersList = ordersMapper.listOrdersByUserId(userId);
-        return getOrdersVo(ordersList);
+        try {
+            List<Orders> ordersList = ordersMapper.listOrdersByUserId(userId);
+            return getOrdersVo(ordersList);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public int updateOrder(Integer orderId, Integer orderState) {
-        return ordersMapper.updateOrder(orderId, orderState);
+        try {
+            return ordersMapper.updateOrder(orderId, orderState);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public int updateOrders(Integer orderId, Double orderTotal) {
-        return ordersMapper.updateOrders(orderId, orderTotal);
+        try {
+            return ordersMapper.updateOrders(orderId, orderTotal);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public OrdersVo getOrdersVo(Orders orders) {

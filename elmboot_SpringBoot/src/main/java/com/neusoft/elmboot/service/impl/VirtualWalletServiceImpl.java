@@ -1,13 +1,15 @@
 package com.neusoft.elmboot.service.impl;
 
-import com.neusoft.elmboot.common.BaseResponse;
-import com.neusoft.elmboot.common.ResultUtils;
+import com.neusoft.elmboot.common.ErrorCode;
+import com.neusoft.elmboot.exception.BusinessException;
+import com.neusoft.elmboot.mapper.TransactionFlowMapper;
 import com.neusoft.elmboot.mapper.VirtualWalletMapper;
-import com.neusoft.elmboot.model.bo.Business;
+import com.neusoft.elmboot.model.bo.TransactionFlow;
 import com.neusoft.elmboot.model.bo.VirtualWallet;
-import com.neusoft.elmboot.model.vo.BusinessVo;
+import com.neusoft.elmboot.model.vo.TransactionFlowVo;
 import com.neusoft.elmboot.model.vo.VirtualWalletVo;
 import com.neusoft.elmboot.service.VirtualWalletService;
+import com.neusoft.elmboot.util.DateUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +25,19 @@ import java.util.stream.Collectors;
 public class VirtualWalletServiceImpl implements VirtualWalletService {
     @Autowired
     private VirtualWalletMapper virtualWalletMapper;
+
+    @Autowired
+    private TransactionFlowMapper transactionFlowMapper;
+
+    @Override
+    public int saveWallet(String userId) {
+        String currentTime = DateUtil.getTodayString();
+        try {
+            return virtualWalletMapper.saveVirtualWallet(userId, currentTime);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public VirtualWalletVo getWallet(String userId) {
@@ -35,8 +51,12 @@ public class VirtualWalletServiceImpl implements VirtualWalletService {
 
     @Override
     public int recharge(String userId, Integer amount) {
-        //先获取余额，再更新余额
+        //先获取余额
         VirtualWalletVo virtualWalletVo = this.getWallet(userId);
+        if (virtualWalletVo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "当前用户" + userId + " 的虚拟钱包不存在");
+        }
+        //再更新余额
         Integer balance = virtualWalletVo.getBalance() + amount;
         try {
             return virtualWalletMapper.updateVirtualWallet(userId, balance);
@@ -47,8 +67,12 @@ public class VirtualWalletServiceImpl implements VirtualWalletService {
 
     @Override
     public int expense(String userId, Integer amount) {
-        //先获取余额，再更新余额
+        //先获取余额
         VirtualWalletVo virtualWalletVo = this.getWallet(userId);
+        if (virtualWalletVo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "当前用户" + userId + " 的虚拟钱包不存在");
+        }
+        //再更新余额
         Integer balance = virtualWalletVo.getBalance() - amount;
         try {
             return virtualWalletMapper.updateVirtualWallet(userId, balance);
@@ -70,11 +94,29 @@ public class VirtualWalletServiceImpl implements VirtualWalletService {
                 System.out.println("提现到银行卡");
                 break;
         }
-        //先获取余额，再更新余额
+        //先获取余额
         VirtualWalletVo virtualWalletVo = this.getWallet(userId);
+        if (virtualWalletVo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "当前用户" + userId + " 的虚拟钱包不存在");
+        }
+        //再更新余额
         Integer balance = virtualWalletVo.getBalance() - amount;
         try {
             return virtualWalletMapper.updateVirtualWallet(userId, balance);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<TransactionFlowVo> getLog(String userId) {
+        VirtualWalletVo virtualWalletVo = this.getWallet(userId);
+        if (virtualWalletVo == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "当前用户" + userId + " 的虚拟钱包不存在");
+        }
+        try {
+            List<TransactionFlow> transactionFlowList = transactionFlowMapper.getTransactionFlow(userId, virtualWalletVo.getId());
+            return getTransactionFlowVo(transactionFlowList);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -89,11 +131,19 @@ public class VirtualWalletServiceImpl implements VirtualWalletService {
         return virtualWalletVo;
     }
 
+    public TransactionFlowVo getTransactionFlowVo(TransactionFlow transactionFlow) {
+        if (transactionFlow == null) {
+            return null;
+        }
+        TransactionFlowVo transactionFlowVo = new TransactionFlowVo();
+        BeanUtils.copyProperties(transactionFlow, transactionFlowVo);
+        return transactionFlowVo;
+    }
 
-    public List<VirtualWalletVo> getVirtualWalletVo(List<VirtualWallet> virtualWalletList) {
-        if (CollectionUtils.isEmpty(virtualWalletList)) {
+    public List<TransactionFlowVo> getTransactionFlowVo(List<TransactionFlow> transactionFlowList) {
+        if (CollectionUtils.isEmpty(transactionFlowList)) {
             return new ArrayList<>();
         }
-        return virtualWalletList.stream().map(this::getVirtualWalletVo).collect(Collectors.toList());
+        return transactionFlowList.stream().map(this::getTransactionFlowVo).collect(Collectors.toList());
     }
 }

@@ -1,5 +1,6 @@
 package com.neusoft.elmboot.mapper;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -9,11 +10,11 @@ import com.neusoft.elmboot.model.bo.Business;
 @Mapper
 public interface BusinessMapper {
     @Select("select * from business where orderTypeId=#{orderTypeId} order by businessId")
-    public List<Business> listBusinessByOrderTypeId(Integer orderTypeId);
+    public List<Business> listBusinessByOrderTypeId(Integer orderTypeId) throws SQLException;
 
     @Select("select * from business where businessId=#{businessId}")
-    public Business getBusinessById(Integer businessId);
+    public Business getBusinessById(Integer businessId) throws SQLException;
 
     @Select("SELECT * FROM business WHERE businessName LIKE CONCAT('%', #{businessName}, '%')")
-    List<Business> listBusinessByBusinessName(String businessName);
+    List<Business> listBusinessByBusinessName(String businessName) throws SQLException;
 }

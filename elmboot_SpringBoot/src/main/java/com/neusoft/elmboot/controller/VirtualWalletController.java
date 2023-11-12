@@ -4,14 +4,14 @@ import com.neusoft.elmboot.common.BaseResponse;
 import com.neusoft.elmboot.common.ErrorCode;
 import com.neusoft.elmboot.common.ResultUtils;
 import com.neusoft.elmboot.exception.BusinessException;
+import com.neusoft.elmboot.model.vo.TransactionFlowVo;
 import com.neusoft.elmboot.model.vo.VirtualWalletVo;
 import com.neusoft.elmboot.service.VirtualWalletService;
 import javafx.scene.layout.Background;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/VirtualWallet")
@@ -20,16 +20,43 @@ public class VirtualWalletController {
     @Autowired
     private VirtualWalletService virtualWalletService;
 
+    @PostMapping
+    public BaseResponse<Integer> saveWallet(@RequestParam("userId") String userId) {
+        if (userId == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
+        }
+        if (virtualWalletService.getWallet(userId) != null) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "当前用户" + userId + " 已经存在虚拟钱包");
+        }
+        Integer result = virtualWalletService.saveWallet(userId);
+        if (result.equals(1)) {
+            return ResultUtils.success(result);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，虚拟钱包创建失败");
+        }
+
+    }
+
     @GetMapping
     public BaseResponse<VirtualWalletVo> getWallet(String userId) {
         if (userId == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
         VirtualWalletVo virtualWalletVo = virtualWalletService.getWallet(userId);
-        return ResultUtils.success(virtualWalletVo);
+        if (virtualWalletVo != null) {
+            return ResultUtils.success(virtualWalletVo);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，获取虚拟钱包失败");
+        }
     }
 
-    //充钱
+    /**
+     * 充钱
+     *
+     * @param userId
+     * @param amount
+     * @return
+     */
     @PostMapping("/recharge")
     public BaseResponse<Integer> recharge(String userId, Integer amount) {
         if (userId == null || amount == null) {
@@ -39,10 +66,20 @@ public class VirtualWalletController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "充值金额应该大于0");
         }
         Integer result = virtualWalletService.recharge(userId, amount);
-        return ResultUtils.success(result);
+        if (result.equals(1)) {
+            return ResultUtils.success(result);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，充值失败");
+        }
     }
 
-    //花钱-·消费
+    /**
+     * 花钱——消费
+     *
+     * @param userId
+     * @param amount
+     * @return
+     */
     @PostMapping("/spend")
     public BaseResponse<Integer> expense(String userId, Integer amount) {
         if (userId == null || amount == null) {
@@ -57,10 +94,21 @@ public class VirtualWalletController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "您的余额不足");
         }
         Integer result = virtualWalletService.expense(userId, amount);
-        return ResultUtils.success(result);
+        if (result.equals(1)) {
+            return ResultUtils.success(result);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，支付失败");
+        }
     }
 
-    //提现withdraw
+    /**
+     * 提现withdraw
+     *
+     * @param userId
+     * @param amount
+     * @param target
+     * @return
+     */
     @PostMapping("/withdraw")
     public BaseResponse<Integer> withdraw(String userId, Integer amount, String target) {
         if (userId == null || amount == null || target == null) {
@@ -75,6 +123,30 @@ public class VirtualWalletController {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "您的余额不足");
         }
         Integer result = virtualWalletService.withdraw(userId, amount, target);
-        return ResultUtils.success(result);
+        if (result.equals(1)) {
+            return ResultUtils.success(result);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，提现失败");
+        }
+    }
+
+    /**
+     * 查看业务流水
+     *
+     * @param userId
+     * @return
+     */
+    @GetMapping("/Log/{userId}")
+    public BaseResponse<List<TransactionFlowVo>> getLog(@PathVariable String userId) {
+        if (userId == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
+        }
+        List<TransactionFlowVo> transactionFlowVoList = virtualWalletService.getLog(userId);
+        if (transactionFlowVoList != null) {
+            return ResultUtils.success(transactionFlowVoList);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，获取交易流水失败");
+        }
+
     }
 }
