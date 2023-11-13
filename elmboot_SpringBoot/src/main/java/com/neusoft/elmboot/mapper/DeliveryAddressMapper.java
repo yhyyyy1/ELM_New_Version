@@ -27,8 +27,8 @@ public interface DeliveryAddressMapper {
      * 新删除，保留元素
      *
      * @param daId
-     * @returnand isDelete=0
      * @throws SQLException
+     * @returnand isDelete=0
      */
     @Update("update deliveryaddress set isDelete = 1 where daId=#{daid}")
     public int removeDeliveryAddress(Integer daId) throws SQLException;

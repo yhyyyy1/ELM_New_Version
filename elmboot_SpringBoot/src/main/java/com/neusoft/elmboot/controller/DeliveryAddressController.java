@@ -8,24 +8,23 @@ import com.neusoft.elmboot.model.bo.DeliveryAddress;
 import com.neusoft.elmboot.model.vo.DeliveryAddressVo;
 import com.neusoft.elmboot.service.DeliveryAddressService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/DeliveryAddressController")
+@RequestMapping("/deliveryAddress")
 public class DeliveryAddressController {
     @Autowired
     private DeliveryAddressService deliveryAddressService;
 
-    @RequestMapping("/listDeliveryAddressByUserId")
-    public BaseResponse<List<DeliveryAddressVo>> listDeliveryAddressByUserId(DeliveryAddress deliveryAddress)
+    @GetMapping("/lists/{userId}")
+    public BaseResponse<List<DeliveryAddressVo>> listDeliveryAddressByUserId(@PathVariable(value = "userId") String userId)
             throws Exception {
-        if (deliveryAddress.getUserId() == null) {
+        if (userId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
-        List<DeliveryAddressVo> deliveryAddressVoList = deliveryAddressService.listDeliveryAddressByUserId(deliveryAddress.getUserId());
+        List<DeliveryAddressVo> deliveryAddressVoList = deliveryAddressService.listDeliveryAddressByUserId(userId);
         if (deliveryAddressVoList != null) {
             return ResultUtils.success(deliveryAddressVoList);
         } else {
@@ -34,13 +33,13 @@ public class DeliveryAddressController {
 
     }
 
-    @RequestMapping("/getDeliveryAddressById")
-    public BaseResponse<DeliveryAddressVo> getDeliveryAddressById(DeliveryAddress deliveryAddress) throws
+    @GetMapping("/{daId}}")
+    public BaseResponse<DeliveryAddressVo> getDeliveryAddressById(@PathVariable(value = "daId") Integer daId) throws
             Exception {
-        if (deliveryAddress.getDaId() == null) {
+        if (daId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
-        DeliveryAddressVo deliveryAddressVo = deliveryAddressService.getDeliveryAddressById(deliveryAddress.getDaId());
+        DeliveryAddressVo deliveryAddressVo = deliveryAddressService.getDeliveryAddressById(daId);
         if (deliveryAddressVo != null) {
             return ResultUtils.success(deliveryAddressVo);
         } else {
@@ -48,8 +47,8 @@ public class DeliveryAddressController {
         }
     }
 
-    @RequestMapping("/saveDeliveryAddress")
-    public BaseResponse<Integer> saveDeliveryAddress(DeliveryAddress deliveryAddress) throws Exception {
+    @PostMapping("/newDA/{deliveryAddress}")
+    public BaseResponse<Integer> saveDeliveryAddress(@PathVariable(value = "deliveryAddress") DeliveryAddress deliveryAddress) throws Exception {
         if (deliveryAddress.getContactName() == null || deliveryAddress.getContactSex() == null || deliveryAddress.getContactTel() == null || deliveryAddress.getAddress() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -70,8 +69,8 @@ public class DeliveryAddressController {
         }
     }
 
-    @RequestMapping("/updateDeliveryAddress")
-    public BaseResponse<Integer> updateDeliveryAddress(DeliveryAddress deliveryAddress) throws Exception {
+    @PostMapping("/updated-DA/{deliveryAddress}")
+    public BaseResponse<Integer> updateDeliveryAddress(@PathVariable(value = "deliveryAddress") DeliveryAddress deliveryAddress) throws Exception {
         if (deliveryAddress.getContactName() == null || deliveryAddress.getContactSex() == null || deliveryAddress.getContactTel() == null || deliveryAddress.getAddress() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -92,8 +91,8 @@ public class DeliveryAddressController {
         }
     }
 
-    @RequestMapping("/removeDeliveryAddress")
-    public BaseResponse<Integer> removeDeliveryAddress(DeliveryAddress deliveryAddress) throws Exception {
+    @DeleteMapping
+    public BaseResponse<Integer> removeDeliveryAddress(@RequestParam("deliveryAddress") DeliveryAddress deliveryAddress) throws Exception {
         if (deliveryAddress.getDaId() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }

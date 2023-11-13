@@ -8,19 +8,18 @@ import com.neusoft.elmboot.exception.BusinessException;
 import com.neusoft.elmboot.common.ErrorCode;
 import com.neusoft.elmboot.model.vo.CartVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.neusoft.elmboot.model.bo.Cart;
 import com.neusoft.elmboot.service.CartService;
 
 @RestController
-@RequestMapping("/CartController")
+@RequestMapping("/cart")
 public class CartController {
     @Autowired
     private CartService cartService;
 
-    @RequestMapping("/listCart")
-    public BaseResponse<List<CartVo>> listCart(Cart cart) throws Exception {
+    @GetMapping("/lists/{cart}")
+    public BaseResponse<List<CartVo>> listCart(@PathVariable(value = "cart") Cart cart) throws Exception {
         if (cart.getCartId() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -32,8 +31,8 @@ public class CartController {
         }
     }
 
-    @RequestMapping("/saveCart")
-    public BaseResponse<Integer> saveCart(Cart cart) throws Exception {
+    @PostMapping("/newCarts/{cart}")
+    public BaseResponse<Integer> saveCart(@PathVariable(value = "cart") Cart cart) throws Exception {
         if (cart.getUserId() == null || cart.getBusinessId() == null || cart.getFoodId() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -45,8 +44,8 @@ public class CartController {
         }
     }
 
-    @RequestMapping("/updateCart")
-    public BaseResponse<Integer> updateCart(Cart cart) throws Exception {
+    @PostMapping("/updated-carts/{cart}")
+    public BaseResponse<Integer> updateCart(@PathVariable(value = "cart") Cart cart) throws Exception {
         if (cart.getBusinessId() == null || cart.getFoodId() == null || cart.getUserId() == null || cart.getQuantity() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -61,8 +60,8 @@ public class CartController {
         }
     }
 
-    @RequestMapping("/removeCart")
-    public BaseResponse<Integer> removeCart(Cart cart) throws Exception {
+    @DeleteMapping
+    public BaseResponse<Integer> removeCart(@RequestParam("cart") Cart cart) throws Exception {
         if (cart.getBusinessId() == null || cart.getFoodId() == null || cart.getUserId() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }

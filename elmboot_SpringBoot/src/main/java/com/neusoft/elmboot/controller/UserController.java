@@ -6,22 +6,21 @@ import com.neusoft.elmboot.exception.BusinessException;
 import com.neusoft.elmboot.common.ErrorCode;
 import com.neusoft.elmboot.model.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.neusoft.elmboot.model.bo.User;
 import com.neusoft.elmboot.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 
 @RestController
-@RequestMapping("/UserController")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
 
-    @RequestMapping("/getUserByIdByPass")
-    public BaseResponse<UserVo> getUserByIdByPass(User user) throws Exception {
+    @GetMapping("/logged-in-user/{user}")
+    public BaseResponse<UserVo> getUserByIdByPass(@PathVariable(value = "user") User user) throws Exception {
         if (StringUtils.isAnyBlank(user.getUserId(), user.getPassword())) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -40,8 +39,8 @@ public class UserController {
      * @return
      * @throws Exception
      */
-    @RequestMapping("/getUserById")
-    public BaseResponse<Integer> getUserById(User user) throws Exception {
+    @GetMapping("/{user}")
+    public BaseResponse<Integer> getUserById(@PathVariable(value = "user") User user) throws Exception {
         if (StringUtils.isEmpty(user.getUserId())) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -53,8 +52,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/saveUser")
-    public BaseResponse<Integer> saveUser(User user) throws Exception {
+    @PostMapping("/newUsers/{user}")
+    public BaseResponse<Integer> saveUser(@PathVariable(value = "user") User user) throws Exception {
         if (StringUtils.isAnyBlank(user.getUserId(), user.getPassword(), user.getUserName()) || user.getPassword() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -69,8 +68,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/updatePoint")
-    public BaseResponse<Integer> updatePoint(User user) throws Exception {
+    @PostMapping("/newPoints/{user}")
+    public BaseResponse<Integer> updatePoint(@PathVariable(value = "user") User user) throws Exception {
         if (user.getUserId() == null || user.getPoint() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -82,8 +81,8 @@ public class UserController {
         }
     }
 
-    @RequestMapping("/getPointById")
-    public BaseResponse<Double> getPointById(User user) throws Exception {
+    @GetMapping("/points/{user}")
+    public BaseResponse<Double> getPointById(@PathVariable(value = "user") User user) throws Exception {
         if (user.getUserId() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }

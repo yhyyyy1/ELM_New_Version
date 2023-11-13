@@ -20,8 +20,8 @@ public class VirtualWalletController {
     @Autowired
     private VirtualWalletService virtualWalletService;
 
-    @PostMapping
-    public BaseResponse<Integer> saveWallet(@RequestParam("userId") String userId) {
+    @PostMapping("/newWallet/{userId}")
+    public BaseResponse<Integer> saveWallet(@PathVariable(value = "userId") String userId) {
         if (userId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -37,8 +37,8 @@ public class VirtualWalletController {
 
     }
 
-    @GetMapping
-    public BaseResponse<VirtualWalletVo> getWallet(String userId) {
+    @GetMapping("/{userId}")
+    public BaseResponse<VirtualWalletVo> getWallet(@PathVariable(value = "userId") String userId) {
         if (userId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -58,7 +58,7 @@ public class VirtualWalletController {
      * @return
      */
     @PostMapping("/recharge")
-    public BaseResponse<Integer> recharge(String userId, Integer amount) {
+    public BaseResponse<Integer> recharge(@RequestParam("userId") String userId, @RequestParam("amount") Integer amount) {
         if (userId == null || amount == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -81,7 +81,7 @@ public class VirtualWalletController {
      * @return
      */
     @PostMapping("/spend")
-    public BaseResponse<Integer> expense(String userId, Integer amount) {
+    public BaseResponse<Integer> expense(@RequestParam("userId") String userId, @RequestParam("amount") Integer amount) {
         if (userId == null || amount == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -110,7 +110,7 @@ public class VirtualWalletController {
      * @return
      */
     @PostMapping("/withdraw")
-    public BaseResponse<Integer> withdraw(String userId, Integer amount, String target) {
+    public BaseResponse<Integer> withdraw(@RequestParam("userId") String userId, @RequestParam("amount") Integer amount, @RequestParam("amount") String target) {
         if (userId == null || amount == null || target == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -136,8 +136,8 @@ public class VirtualWalletController {
      * @param userId
      * @return
      */
-    @GetMapping("/Log/{userId}")
-    public BaseResponse<List<TransactionFlowVo>> getLog(@PathVariable String userId) {
+    @GetMapping("/Logs/{userId}")
+    public BaseResponse<List<TransactionFlowVo>> getLog(@PathVariable(value = "userId") String userId) {
         if (userId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }

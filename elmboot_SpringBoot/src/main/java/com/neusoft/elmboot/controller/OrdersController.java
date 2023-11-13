@@ -8,19 +8,44 @@ import com.neusoft.elmboot.exception.BusinessException;
 import com.neusoft.elmboot.common.ErrorCode;
 import com.neusoft.elmboot.model.vo.OrdersVo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.neusoft.elmboot.model.bo.Orders;
 import com.neusoft.elmboot.service.OrdersService;
 
 @RestController
-@RequestMapping("/OrdersController")
+@RequestMapping("/orders")
 public class OrdersController {
     @Autowired
     private OrdersService ordersService;
 
-    @RequestMapping("/createOrders")
-    public BaseResponse<Integer> createOrders(Orders orders) throws Exception {
+    @GetMapping("/{orderId}")
+    public BaseResponse<OrdersVo> getOrdersById(@PathVariable(value = "orderId") Integer orderId) throws Exception {
+        if (orderId == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
+        }
+        OrdersVo ordersVo = ordersService.getOrdersById(orderId);
+        if (ordersVo != null) {
+            return ResultUtils.success(ordersVo);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，获取订单失败");
+        }
+    }
+
+    @GetMapping("/lists/{userId}")
+    public BaseResponse<List<OrdersVo>> listOrdersByUserId(@PathVariable(value = "userId") String userId) throws Exception {
+        if (userId == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
+        }
+        List<OrdersVo> ordersVoList = ordersService.listOrdersByUserId(userId);
+        if (ordersVoList != null) {
+            return ResultUtils.success(ordersVoList);
+        } else {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，获取用户订单列表失败");
+        }
+    }
+
+    @PostMapping("/newOrders/{orders}")
+    public BaseResponse<Integer> createOrders(@PathVariable(value = "orders") Orders orders) throws Exception {
         if (orders.getUserId() == null || orders.getBusinessId() == null || orders.getDaId() == null || orders.getOrderTotal() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -35,34 +60,8 @@ public class OrdersController {
         }
     }
 
-    @RequestMapping("/getOrdersById")
-    public BaseResponse<OrdersVo> getOrdersById(Orders orders) throws Exception {
-        if (orders.getOrderId() == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
-        }
-        OrdersVo ordersVo = ordersService.getOrdersById(orders.getOrderId());
-        if (ordersVo != null) {
-            return ResultUtils.success(ordersVo);
-        } else {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，获取订单失败");
-        }
-    }
-
-    @RequestMapping("/listOrdersByUserId")
-    public BaseResponse<List<OrdersVo>> listOrdersByUserId(Orders orders) throws Exception {
-        if (orders.getUserId() == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
-        }
-        List<OrdersVo> ordersVoList = ordersService.listOrdersByUserId(orders.getUserId());
-        if (ordersVoList != null) {
-            return ResultUtils.success(ordersVoList);
-        } else {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，获取用户订单列表失败");
-        }
-    }
-
-    @RequestMapping("/updateOrder")
-    public BaseResponse<Integer> updateOrder(Orders orders) throws Exception {
+    @PostMapping("/newStates/{orders}")
+    public BaseResponse<Integer> updateOrder(@PathVariable(value = "orders") Orders orders) throws Exception {
         if (orders.getUserId() == null || orders.getOrderState() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
@@ -74,8 +73,8 @@ public class OrdersController {
         }
     }
 
-    @RequestMapping("/updateOrders")
-    public BaseResponse<Integer> updateOrders(Orders orders) throws Exception {
+    @PostMapping("/newTotals/{orders}")
+    public BaseResponse<Integer> updateOrders(@PathVariable(value = "orders") Orders orders) throws Exception {
         if (orders.getUserId() == null || orders.getOrderTotal() == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
