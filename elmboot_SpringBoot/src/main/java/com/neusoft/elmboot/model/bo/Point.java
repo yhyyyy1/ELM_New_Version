@@ -3,9 +3,8 @@ package com.neusoft.elmboot.model.bo;
 import lombok.Data;
 
 @Data
-public class VirtualWallet {
+public class Point {
     private Long id;
-    private String createTime;
-    private Integer balance;
     private String userId;
+    private Integer balance;
 }
