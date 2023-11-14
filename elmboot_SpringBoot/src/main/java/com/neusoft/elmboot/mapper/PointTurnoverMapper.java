@@ -16,6 +16,7 @@ public interface PointTurnoverMapper {
     int savePointTurnover(Long pointId, String userId, String state, Insert amount, String createTime) throws SQLException;
 
     //todo 更新查询逻辑
+
     /**
      * 用于获取未使用积分
      *
@@ -23,7 +24,7 @@ public interface PointTurnoverMapper {
      * @param userId
      * @return
      */
-    @Select("SELECT * FROM pointturnover WHERE userId =#{userId} and pointId =#{pointId} and state = 'A'")
+    @Select("SELECT * FROM pointturnover WHERE userId = #{userId} AND pointId = #{pointId} AND state LIKE 'A%'")
     List<PointTurnover> getPointTurnover(Long pointId, String userId) throws SQLException;
 
     /**
