@@ -19,8 +19,19 @@ public class UserController {
     private UserService userService;
 
 
-    @GetMapping("/logged-in-user/{user}")
-    public BaseResponse<UserVo> getUserByIdByPass(@PathVariable(value = "user") User user) throws Exception {
+    //todo 为什么要改成Post？
+    //todo 修改返回类型，将JWT字符串作为登录成功的返回
+
+    /**
+     * 用户登录
+     * 虽然没有涉及到业务数据的变化，但是登录还是要用post方法以掩盖敏感信息
+     *
+     * @param user
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/logged-in-users")
+    public BaseResponse<UserVo> getUserByIdByPass(@RequestParam("user") User user) throws Exception {
         if (StringUtils.isAnyBlank(user.getUserId(), user.getPassword())) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }

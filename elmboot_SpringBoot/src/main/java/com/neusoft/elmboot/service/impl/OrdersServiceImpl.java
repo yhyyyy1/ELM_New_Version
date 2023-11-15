@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.neusoft.elmboot.model.vo.OrdersVo;
+import com.neusoft.elmboot.util.DateUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,6 @@ import com.neusoft.elmboot.model.bo.Cart;
 import com.neusoft.elmboot.model.bo.OrderDetailet;
 import com.neusoft.elmboot.model.bo.Orders;
 import com.neusoft.elmboot.service.OrdersService;
-import com.neusoft.elmboot.util.CommonUtil;
 import org.springframework.util.CollectionUtils;
 
 @Service
@@ -41,7 +41,7 @@ public class OrdersServiceImpl implements OrdersService {
 
 
         //2、创建订单（返回生成的订单编号）
-        orders.setOrderDate(CommonUtil.getCurrentDate());
+        orders.setOrderDate(DateUtil.getTodayString());
         try {
             ordersMapper.saveOrders(orders);
         } catch (SQLException e) {
