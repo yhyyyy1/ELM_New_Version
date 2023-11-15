@@ -67,30 +67,4 @@ public class UserController {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，新增用户失败");
         }
     }
-
-    @PostMapping("/newPoints/{user}")
-    public BaseResponse<Integer> updatePoint(@PathVariable(value = "user") User user) throws Exception {
-        if (user.getUserId() == null || user.getPoint() <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
-        }
-        Integer result = userService.updatePoint(user);
-        if (result.equals(1)) {
-            return ResultUtils.success(result);
-        } else {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，更新用户积分失败");
-        }
-    }
-
-    @GetMapping("/points/{user}")
-    public BaseResponse<Double> getPointById(@PathVariable(value = "user") User user) throws Exception {
-        if (user.getUserId() == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
-        }
-        Double result = userService.getPointById(user.getUserId());
-        if (result < 0) {
-            return ResultUtils.success(result);
-        } else {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，更新用户积分失败");
-        }
-    }
 }

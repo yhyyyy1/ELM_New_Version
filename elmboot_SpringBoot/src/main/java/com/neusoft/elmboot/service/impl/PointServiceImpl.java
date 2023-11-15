@@ -15,9 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,9 +36,6 @@ public class PointServiceImpl implements PointService {
      */
     @Override
     public List<PointTurnover> checkDate(List<PointTurnover> pointTurnoverList) {
-        if (pointTurnoverList == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
-        }
         String DateNow = DateUtil.getTodayString();
         DateNow = DateUtil.roundUpToDay(DateNow);
         Iterator<PointTurnover> iterator = pointTurnoverList.iterator();
@@ -50,7 +47,7 @@ public class PointServiceImpl implements PointService {
             if (!DateUtil.compareDate(createTime, DateNow)) {
                 //如果超过一年，过期了，就更新pointTurnover表
                 try {
-                    int result = pointTurnoverMapper.updateState(pointTurnover.getId(), pointTurnover.getPointId(), pointTurnover.getUserId(), "B");
+                    int result = pointTurnoverMapper.updateState(pointTurnover.getId(), pointTurnover.getPointId(), pointTurnover.getUserId(), "C");
                     if (result != 1) {
                         throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，更新积分明细状态失败");
                     }
@@ -72,19 +69,15 @@ public class PointServiceImpl implements PointService {
      */
     @Override
     public List<PointTurnover> getUsefulPointTurnover(String userId) {
-        if (userId == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
-        }
         try {
             Point point = this.getPoint(userId);
-            List<PointTurnover> pointTurnoverList = pointTurnoverMapper.getPointTurnover(point.getId(), userId);
-            if(pointTurnoverList != null) {
-                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，获取pointTurnover列表失败");
+            if (point == null) {
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，查询用户积分账户失败");
             }
+            return pointTurnoverMapper.getUsefulPointTurnover(point.getId(), userId);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 
     /**
@@ -96,17 +89,72 @@ public class PointServiceImpl implements PointService {
      */
     @Override
     public List<PointTurnover> usePoint(List<PointTurnover> pointTurnoverList, Integer amount) {
-        if (pointTurnoverList == null || amount == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+        //使用比较函数，先将pointTurnoverList按照从小到大排序——从早到晚排序
+        Collections.sort(pointTurnoverList, new Comparator<PointTurnover>() {
+            @Override
+            public int compare(PointTurnover p1, PointTurnover p2) {
+                try {
+                    Date d1 = dateFormat.parse(p1.getCreateTime());
+                    Date d2 = dateFormat.parse(p2.getCreateTime());
+                    return d1.compareTo(d2);
+                } catch (ParseException e) {
+                    throw new IllegalArgumentException("Invalid date format", e);
+                }
+            }
+        });
+
+        try {
+            Iterator<PointTurnover> iterator = pointTurnoverList.iterator();
+            int remainingAmount = amount;
+            while (iterator.hasNext()) {
+                PointTurnover pointTurnover = iterator.next();
+                int canUsePoint = pointTurnover.getBalance();
+                if (canUsePoint > remainingAmount) {
+                    //表明可直接满足，不需要继续遍历了,
+                    int lastPoint = canUsePoint - remainingAmount;
+                    int result1 = pointTurnoverMapper.updateBalance(pointTurnover.getId(), pointTurnover.getPointId(), pointTurnover.getUserId(), lastPoint);
+                    int result2 = pointTurnoverMapper.updateState(pointTurnover.getId(), pointTurnover.getPointId(), pointTurnover.getUserId(), "A2");
+                    if (result1 != 1) {
+                        throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，更新积分Balance失败");
+                    }
+                    if (result2 != 1) {
+                        throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，更新积分state失败");
+                    }
+                    break;
+                } else if (canUsePoint == remainingAmount) {
+                    int result1 = pointTurnoverMapper.updateBalance(pointTurnover.getId(), pointTurnover.getPointId(), pointTurnover.getUserId(), 0);
+                    int result2 = pointTurnoverMapper.updateState(pointTurnover.getId(), pointTurnover.getPointId(), pointTurnover.getUserId(), "B");
+                    if (result1 != 1) {
+                        throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，更新积分Balance失败");
+                    }
+                    if (result2 != 1) {
+                        throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，更新积分state失败");
+                    }
+                    iterator.remove();
+                    break;
+                } else {
+                    remainingAmount -= canUsePoint;
+                    int result1 = pointTurnoverMapper.updateBalance(pointTurnover.getId(), pointTurnover.getPointId(), pointTurnover.getUserId(), 0);
+                    int result2 = pointTurnoverMapper.updateState(pointTurnover.getId(), pointTurnover.getPointId(), pointTurnover.getUserId(), "B");
+                    if (result1 != 1) {
+                        throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，更新积分Balance失败");
+                    }
+                    if (result2 != 1) {
+                        throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，更新积分state失败");
+                    }
+                    iterator.remove();
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        if (amount < 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "积分使用不可为负数");
-        }
-        return null;
+        return pointTurnoverList;
     }
 
     /**
-     * 消费的new PT
+     * 创建新的消费PT记录
      *
      * @param userId
      * @param amount
@@ -114,19 +162,21 @@ public class PointServiceImpl implements PointService {
      */
     @Override
     public Integer LogUsePointTurnover(String userId, Integer amount) {
-        if (userId == null || amount == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
+        try {
+            Point point = this.getPoint(userId);
+            return pointTurnoverMapper.savePointTurnover(point.getId(), userId, "D", amount, DateUtil.getTodayString());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        if (amount < 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "积分使用不可为负数");
-        }
-        return null;
     }
 
     @Override
     public List<PointTurnoverVo> getPointTurnoverVoList(String userId) {
         try {
             Point point = this.getPoint(userId);
+            if (point == null) {
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，查询用户积分账户失败");
+            }
             List<PointTurnover> pointTurnoverList = pointTurnoverMapper.getPointTurnover(point.getId(), userId);
             return getPointTurnoverVo(pointTurnoverList);
         } catch (SQLException e) {
@@ -135,25 +185,20 @@ public class PointServiceImpl implements PointService {
     }
 
     @Override
-    public Integer getPointBalance(String userId) {
-        return null;
-    }
-
-    @Override
-    public List<PointTurnover> getPointTurnover(String userId) {
-        return null;
-    }
-
-    @Override
-    public Integer updatePointTurnover(String userId, Integer amount) {
-        return null;
+    public Integer savePointTurnover(String userId, Integer amount) {
+        try {
+            Point point = this.getPoint(userId);
+            if (point == null) {
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，查询用户积分账户失败");
+            }
+            return pointTurnoverMapper.savePointTurnover(point.getId(), userId, "A1", amount, DateUtil.getTodayString());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Point getPoint(String userId) {
-        if (userId == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
-        }
         try {
             return pointMapper.getPoint(userId);
         } catch (SQLException e) {

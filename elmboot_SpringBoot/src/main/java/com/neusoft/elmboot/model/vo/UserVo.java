@@ -1,4 +1,5 @@
 package com.neusoft.elmboot.model.vo;
+
 import lombok.Data;
 
 @Data
@@ -8,5 +9,5 @@ public class UserVo {
     private Integer userSex;
     private String userImg;
     private Integer delTag;
-    private double point;
+    private Integer isDelete;
 }

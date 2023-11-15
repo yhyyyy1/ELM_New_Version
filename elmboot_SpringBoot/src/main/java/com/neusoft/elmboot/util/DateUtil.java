@@ -28,6 +28,7 @@ public class DateUtil {
         return null;
     }
 
+    // todo: 待记录
     //将时间向上取整到天，用于比较
     public static String roundUpToDay(String dateTimeStr) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -40,6 +41,8 @@ public class DateUtil {
         DateTimeFormatter resultFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return dateTime.format(resultFormatter);
     }
+
+    // todo: 待记录
 
     /**
      * 时间比较，要保证第一个时间早，第二个时间晚

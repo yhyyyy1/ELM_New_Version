@@ -1,5 +1,6 @@
 package com.neusoft.elmboot.service.impl;
 
+import com.neusoft.elmboot.mapper.PointMapper;
 import com.neusoft.elmboot.model.vo.UserVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private PointMapper pointMapper;
 
     @Override
     public UserVo getUserByIdByPass(User user) {
@@ -48,25 +52,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public int saveUser(User user) {
         try {
+            pointMapper.savePoint(user.getUserId());
             return userMapper.saveUser(user);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public int updatePoint(User user) {
-        try {
-            return userMapper.updatePoint(user);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public double getPointById(String userId) {
-        try {
-            return userMapper.getPointById(userId);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 }

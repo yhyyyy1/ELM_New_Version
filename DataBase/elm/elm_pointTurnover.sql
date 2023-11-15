@@ -28,9 +28,9 @@ CREATE TABLE `pointTurnover`
     `pointId`    BIGINT            NOT NULL COMMENT '积分账户编号',
     `userId`     varchar(20)       NOT NULL COMMENT '用户编号',
     `state`      varchar(20)       NOT NULL COMMENT '积分流水状态',
-    `amount`     int               NOT NULL COMMENT '流水金额',
-    `total`      int               NOT NULL COMMENT '流水金额',
-    `balance`    int               NOT NULL COMMENT '流水金额',
+    `amount`     int               NOT NULL COMMENT '消耗积分数',
+    `total`      int               NOT NULL COMMENT '获取积分数',
+    `balance`    int               NOT NULL COMMENT '本次获取的剩余积分数',
     `createTime` varchar(20)       NOT NULL COMMENT '创建日期',
     `isDelete`   TINYINT default 0 not null comment '是否删除',
     PRIMARY KEY (`id`)

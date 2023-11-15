@@ -20,9 +20,4 @@ public interface UserMapper {
     @Insert("insert into user values(#{userId},#{password},#{userName},#{userSex},null,1,0)")
     public int saveUser(User user) throws SQLException;
 
-    @Update("update user set point = #{point} where userId = #{userId}")
-    public int updatePoint(User user) throws SQLException;
-
-    @Select("select point from user where userId = #{userId}")
-    public double getPointById(String userId) throws SQLException;
 }

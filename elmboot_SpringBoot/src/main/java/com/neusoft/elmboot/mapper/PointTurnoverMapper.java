@@ -12,8 +12,8 @@ import java.util.List;
 @Mapper
 public interface PointTurnoverMapper {
 
-    @Insert("insert into pointturnover values (?,#{pointId},#{userId},#{state},#{amount},#{createTime},0)")
-    int savePointTurnover(Long pointId, String userId, String state, Insert amount, String createTime) throws SQLException;
+    @Insert("insert into pointturnover values (?,#{pointId},#{userId},#{state},0,#{total},#{total},#{createTime},0)")
+    int savePointTurnover(Long pointId, String userId, String state, Integer total, String createTime) throws SQLException;
 
     //todo 更新查询逻辑
 
@@ -25,19 +25,21 @@ public interface PointTurnoverMapper {
      * @return
      */
     @Select("SELECT * FROM pointturnover WHERE userId = #{userId} AND pointId = #{pointId} AND state LIKE 'A%'")
-    List<PointTurnover> getPointTurnover(Long pointId, String userId) throws SQLException;
+    List<PointTurnover> getUsefulPointTurnover(Long pointId, String userId) throws SQLException;
 
     /**
      * 用于查询流水
      *
      * @param pointId
      * @param userId
-     * @param state
      * @return
      */
-    @Select("SELECT * FROM pointturnover WHERE userId =#{userId} and pointId =#{pointId} and state =#{state}")
-    List<PointTurnover> getPointTurnover(Long pointId, String userId, String state) throws SQLException;
+    @Select("SELECT * FROM pointturnover WHERE userId =#{userId} and pointId =#{pointId}")
+    List<PointTurnover> getPointTurnover(Long pointId, String userId) throws SQLException;
 
     @Update("UPDATE pointturnover SET state =#{state} WHERE id = #{id} and userId =#{userId} and pointId =#{pointId}")
     int updateState(Long id, Long pointId, String userId, String state) throws SQLException;
+
+    @Update("UPDATE pointturnover SET state =#{balance} WHERE id = #{id} and userId =#{userId} and pointId =#{pointId}")
+    int updateBalance(Long id, Long pointId, String userId, Integer balance) throws SQLException;
 }

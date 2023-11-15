@@ -10,5 +10,5 @@ public class User {
     private Integer userSex;
     private String userImg;
     private Integer delTag;
-    private double point;
+    private Integer isDelete;
 }

@@ -19,9 +19,5 @@ public interface PointService {
 
     Point getPoint(String userId);
 
-    Integer getPointBalance(String userId);
-
-    List<PointTurnover> getPointTurnover(String userId);
-
-    Integer updatePointTurnover(String userId, Integer amount);
+    Integer savePointTurnover(String userId, Integer amount);
 }
