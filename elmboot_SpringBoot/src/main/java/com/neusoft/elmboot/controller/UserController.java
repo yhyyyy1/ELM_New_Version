@@ -11,6 +11,8 @@ import com.neusoft.elmboot.model.bo.User;
 import com.neusoft.elmboot.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -31,13 +33,13 @@ public class UserController {
      * @throws Exception
      */
     @PostMapping("/logged-in-users")
-    public BaseResponse<UserVo> getUserByIdByPass(@RequestParam("user") User user) throws Exception {
+    public BaseResponse<Map<String, String>> getUserByIdByPass(@RequestParam("user") User user) throws Exception {
         if (StringUtils.isAnyBlank(user.getUserId(), user.getPassword())) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
-        UserVo userVo = userService.getUserByIdByPass(user);
-        if (userVo != null) {
-            return ResultUtils.success(userVo);
+        Map<String, String> result = userService.getUserByIdByPass(user);
+        if (result.isEmpty()) {
+            return ResultUtils.success(result);
         } else {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，用户登录失败");
         }

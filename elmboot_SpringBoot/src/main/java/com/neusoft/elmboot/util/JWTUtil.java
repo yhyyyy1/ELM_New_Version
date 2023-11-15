@@ -5,11 +5,17 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import java.util.Calendar;
-import java.util.Map;
+import java.util.*;
 
 public class JWTUtil {
     public static final String SING = "88044327";
+
+    private final Map<String, Object> header = new HashMap<String, Object>();
+
+    public JWTUtil() {
+        header.put("alg", "HS256");
+        header.put("typ", "JWT");
+    }
 
     /**
      * 生成 token
@@ -17,14 +23,17 @@ public class JWTUtil {
      * @param map
      * @return
      */
-    public static String getToken(Map<String, String> map) {
+    public String getToken(Map<String, String> map) {
         Calendar instance = Calendar.getInstance();
         instance.add(Calendar.DATE, 7);
         JWTCreator.Builder builder = JWT.create();
-
+        map.put("id", UUID.randomUUID().toString());
         //原表达为：map.forEach((k,v)->builder.withClaim(k,v));
         map.forEach(builder::withClaim);
-        return builder.withExpiresAt(instance.getTime())//设置过期时间
+        return builder
+                .withHeader(header)
+                .withIssuedAt(new Date())
+                .withExpiresAt(instance.getTime())//设置过期时间
                 .sign(Algorithm.HMAC256(SING));
     }
 
@@ -37,6 +46,8 @@ public class JWTUtil {
     public static DecodedJWT verify(String token) {
         return JWT.require(Algorithm.HMAC256(SING)).build().verify(token);
     }
+
+
 }
 
 
