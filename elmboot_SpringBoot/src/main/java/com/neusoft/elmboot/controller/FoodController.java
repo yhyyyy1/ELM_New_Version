@@ -21,7 +21,7 @@ public class FoodController {
     @Autowired
     private FoodService foodService;
 
-    @GetMapping("/list/{businessId}")
+    @GetMapping("/lists/{businessId}")
     public BaseResponse<List<FoodVo>> listFoodByBusinessId(@PathVariable(value = "businessId") Integer businessId) throws Exception {
         if (businessId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");

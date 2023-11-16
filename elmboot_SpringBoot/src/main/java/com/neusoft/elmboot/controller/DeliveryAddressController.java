@@ -33,7 +33,7 @@ public class DeliveryAddressController {
 
     }
 
-    @GetMapping("/{daId}}")
+    @GetMapping("/{daId}")
     public BaseResponse<DeliveryAddressVo> getDeliveryAddressById(@PathVariable(value = "daId") Integer daId) throws
             Exception {
         if (daId == null) {

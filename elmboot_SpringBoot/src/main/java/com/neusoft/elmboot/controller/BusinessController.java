@@ -32,10 +32,9 @@ public class BusinessController {
         } else {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，获取商家列表失败");
         }
-
     }
 
-    @GetMapping("/{businessId}")
+    @GetMapping("/businesses/{businessId}")
     public BaseResponse<BusinessVo> getBusinessById(@PathVariable(value = "businessId") Integer businessId) throws Exception {
         if (businessId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
@@ -58,6 +57,4 @@ public class BusinessController {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，查询商家列表失败");
         }
     }
-
-
 }

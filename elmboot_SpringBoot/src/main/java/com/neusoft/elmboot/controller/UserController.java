@@ -22,8 +22,6 @@ public class UserController {
 
 
     //todo 为什么要改成Post？
-    //todo 修改返回类型，将JWT字符串作为登录成功的返回
-
     /**
      * 用户登录
      * 虽然没有涉及到业务数据的变化，但是登录还是要用post方法以掩盖敏感信息
