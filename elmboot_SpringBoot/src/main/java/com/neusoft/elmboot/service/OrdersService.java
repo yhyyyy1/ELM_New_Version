@@ -6,7 +6,7 @@ import com.neusoft.elmboot.model.bo.Orders;
 import com.neusoft.elmboot.model.vo.OrdersVo;
 
 public interface OrdersService {
-    public int createOrders(Orders orders);
+    public int createOrders(String userId, Integer businessId, Integer daId, Double orderTotal);
 
     public OrdersVo getOrdersById(Integer orderId);
 

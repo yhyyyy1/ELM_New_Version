@@ -89,10 +89,10 @@ public class PointServiceImpl implements PointService {
      */
     @Override
     public List<PointTurnover> usePoint(List<PointTurnover> pointTurnoverList, Integer amount) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         //使用比较函数，先将pointTurnoverList按照从小到大排序——从早到晚排序
-        Collections.sort(pointTurnoverList, new Comparator<PointTurnover>() {
+        pointTurnoverList.sort(new Comparator<PointTurnover>() {
             @Override
             public int compare(PointTurnover p1, PointTurnover p2) {
                 try {
@@ -114,6 +114,7 @@ public class PointServiceImpl implements PointService {
                 if (canUsePoint > remainingAmount) {
                     //表明可直接满足，不需要继续遍历了,
                     int lastPoint = canUsePoint - remainingAmount;
+                    remainingAmount = 0;
                     int result1 = pointTurnoverMapper.updateBalance(pointTurnover.getId(), pointTurnover.getPointId(), pointTurnover.getUserId(), lastPoint);
                     int result2 = pointTurnoverMapper.updateState(pointTurnover.getId(), pointTurnover.getPointId(), pointTurnover.getUserId(), "A2");
                     if (result1 != 1) {
@@ -124,6 +125,7 @@ public class PointServiceImpl implements PointService {
                     }
                     break;
                 } else if (canUsePoint == remainingAmount) {
+                    remainingAmount = 0;
                     int result1 = pointTurnoverMapper.updateBalance(pointTurnover.getId(), pointTurnover.getPointId(), pointTurnover.getUserId(), 0);
                     int result2 = pointTurnoverMapper.updateState(pointTurnover.getId(), pointTurnover.getPointId(), pointTurnover.getUserId(), "B");
                     if (result1 != 1) {
@@ -147,6 +149,9 @@ public class PointServiceImpl implements PointService {
                     iterator.remove();
                 }
             }
+            if (remainingAmount > 0) {
+                throw new BusinessException(ErrorCode.SYSTEM_ERROR, "操作失败，当前积分不够使用");
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -164,7 +169,7 @@ public class PointServiceImpl implements PointService {
     public Integer LogUsePointTurnover(String userId, Integer amount) {
         try {
             Point point = this.getPoint(userId);
-            return pointTurnoverMapper.savePointTurnover(point.getId(), userId, "D", amount, DateUtil.getTodayString());
+            return pointTurnoverMapper.saveUsePointTurnover(point.getId(), userId, "D", amount, DateUtil.getTodayString());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

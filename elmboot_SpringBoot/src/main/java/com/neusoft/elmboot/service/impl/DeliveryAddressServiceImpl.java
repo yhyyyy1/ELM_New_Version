@@ -43,9 +43,9 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService {
     }
 
     @Override
-    public int saveDeliveryAddress(DeliveryAddress deliveryAddress) {
+    public int saveDeliveryAddress(String userId, String contactName, Integer contactSex, String contactTel, String address) {
         try {
-            return deliveryAddressMapper.saveDeliveryAddress(deliveryAddress);
+            return deliveryAddressMapper.saveDeliveryAddress(userId, contactName, contactSex, contactTel, address);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -53,9 +53,9 @@ public class DeliveryAddressServiceImpl implements DeliveryAddressService {
 
 
     @Override
-    public int updateDeliveryAddress(DeliveryAddress deliveryAddress) {
+    public int updateDeliveryAddress(Integer daId, String contactName, Integer contactSex, String contactTel, String address) {
         try {
-            return deliveryAddressMapper.updateDeliveryAddress(deliveryAddress);
+            return deliveryAddressMapper.updateDeliveryAddress(daId, contactName, contactSex, contactTel, address);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

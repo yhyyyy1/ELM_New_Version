@@ -15,6 +15,8 @@ public interface PointTurnoverMapper {
     @Insert("insert into pointturnover values (?,#{pointId},#{userId},#{state},0,#{total},#{total},#{createTime},0)")
     int savePointTurnover(Long pointId, String userId, String state, Integer total, String createTime) throws SQLException;
 
+    @Insert("insert into pointturnover values (?,#{pointId},#{userId},#{state},#{amount},0,0,#{createTime},0)")
+    int saveUsePointTurnover(Long pointId, String userId, String state, Integer amount, String createTime) throws SQLException;
     //todo 更新查询逻辑
 
     /**
@@ -40,6 +42,6 @@ public interface PointTurnoverMapper {
     @Update("UPDATE pointturnover SET state =#{state} WHERE id = #{id} and userId =#{userId} and pointId =#{pointId}")
     int updateState(Long id, Long pointId, String userId, String state) throws SQLException;
 
-    @Update("UPDATE pointturnover SET state =#{balance} WHERE id = #{id} and userId =#{userId} and pointId =#{pointId}")
+    @Update("UPDATE pointturnover SET balance =#{balance} WHERE id = #{id} and userId =#{userId} and pointId =#{pointId}")
     int updateBalance(Long id, Long pointId, String userId, Integer balance) throws SQLException;
 }

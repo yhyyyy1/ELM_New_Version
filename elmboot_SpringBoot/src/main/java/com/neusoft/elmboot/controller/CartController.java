@@ -18,12 +18,14 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
-    @GetMapping("/lists/{cart}")
-    public BaseResponse<List<CartVo>> listCart(@PathVariable(value = "cart") Cart cart) throws Exception {
-        if (cart.getCartId() == null) {
+    @GetMapping("/lists")
+    public BaseResponse<List<CartVo>> listCart(@RequestParam("cartId") Integer cartId,
+                                               @RequestParam("userId") String userId,
+                                               @RequestParam("businessId") Integer businessId) throws Exception {
+        if (cartId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
-        List<CartVo> cartVoList = cartService.listCart(cart);
+        List<CartVo> cartVoList = cartService.listCart(cartId, userId, businessId);
         if (cartVoList != null) {
             return ResultUtils.success(cartVoList);
         } else {
@@ -31,12 +33,14 @@ public class CartController {
         }
     }
 
-    @PostMapping("/newCarts/{cart}")
-    public BaseResponse<Integer> saveCart(@PathVariable(value = "cart") Cart cart) throws Exception {
-        if (cart.getUserId() == null || cart.getBusinessId() == null || cart.getFoodId() == null) {
+    @PostMapping("/newCarts")
+    public BaseResponse<Integer> saveCart(@RequestParam("cartId") Integer cartId,
+                                          @RequestParam("businessId") Integer businessId,
+                                          @RequestParam("foodId") Integer foodId) throws Exception {
+        if (cartId == null || businessId == null || foodId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
-        Integer result = cartService.saveCart(cart);
+        Integer result = cartService.saveCart(cartId, businessId, foodId);
         if (result.equals(1)) {
             return ResultUtils.success(result);
         } else {
@@ -44,15 +48,18 @@ public class CartController {
         }
     }
 
-    @PostMapping("/updated-carts/{cart}")
-    public BaseResponse<Integer> updateCart(@PathVariable(value = "cart") Cart cart) throws Exception {
-        if (cart.getBusinessId() == null || cart.getFoodId() == null || cart.getUserId() == null || cart.getQuantity() == null) {
+    @PostMapping("/updated-carts")
+    public BaseResponse<Integer> updateCart(@RequestParam("businessId") Integer businessId,
+                                            @RequestParam("foodId") Integer foodId,
+                                            @RequestParam("userId") String userId,
+                                            @RequestParam("quantity") Integer quantity) throws Exception {
+        if (businessId == null || foodId == null || userId == null || quantity == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
-        if (cart.getQuantity() <= 0) {
+        if (quantity <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "商品数量不可为空");
         }
-        Integer result = cartService.updateCart(cart);
+        Integer result = cartService.updateCart(businessId, foodId, userId, quantity);
         if (result.equals(1)) {
             return ResultUtils.success(result);
         } else {
@@ -61,11 +68,13 @@ public class CartController {
     }
 
     @DeleteMapping
-    public BaseResponse<Integer> removeCart(@RequestParam("cart") Cart cart) throws Exception {
-        if (cart.getBusinessId() == null || cart.getFoodId() == null || cart.getUserId() == null) {
+    public BaseResponse<Integer> removeCart(@RequestParam("userId") String userId,
+                                            @RequestParam("businessId") Integer businessId,
+                                            @RequestParam("foodId") Integer foodId) throws Exception {
+        if (userId == null || businessId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
-        Integer result = cartService.removeCart(cart);
+        Integer result = cartService.removeCart(userId, businessId, foodId);
         if (result.equals(1)) {
             return ResultUtils.success(result);
         } else {

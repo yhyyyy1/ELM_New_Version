@@ -10,13 +10,13 @@ import com.neusoft.elmboot.model.bo.Cart;
 
 @Mapper
 public interface CartMapper {
-    public List<Cart> listCart(Cart cart);
+    public List<Cart> listCart(Integer cartId, String userId, Integer businessId);
 
-    @Insert("insert into cart values(null,#{foodId},#{businessId},#{userId},1)")
-    public int saveCart(Cart cart) throws SQLException;
+    @Insert("insert into cart(foodId, businessId, userId, quantity, isDelete) values(#{foodId},#{businessId},#{userId},1,0)")
+    public int saveCart(Integer cartId, Integer businessId, Integer foodId) throws SQLException;
 
     @Update("update cart set quantity=#{quantity} where foodId=#{foodId} and businessId=#{businessId} and userId=#{userId}")
-    public int updateCart(Cart cart) throws SQLException;
+    public int updateCart(Integer businessId, Integer foodId, String userId, Integer quantity) throws SQLException;
 
-    public int removeCart(Cart cart) throws SQLException;
+    public int removeCart(String userId, Integer businessId, Integer foodId) throws SQLException;
 }

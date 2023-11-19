@@ -10,9 +10,9 @@ public interface DeliveryAddressService {
 
     public DeliveryAddressVo getDeliveryAddressById(Integer daId);
 
-    public int saveDeliveryAddress(DeliveryAddress deliveryAddress);
+    public int saveDeliveryAddress(String userId, String contactName, Integer contactSex, String contactTel, String address);
 
-    public int updateDeliveryAddress(DeliveryAddress deliveryAddress);
+    public int updateDeliveryAddress(Integer daId, String contactName, Integer contactSex, String contactTel, String address);
 
     public int removeDeliveryAddress(Integer daId);
 }

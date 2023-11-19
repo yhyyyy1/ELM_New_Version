@@ -18,10 +18,10 @@ public interface DeliveryAddressMapper {
     public DeliveryAddress getDeliveryAddressById(Integer daId) throws SQLException;
 
     @Insert("insert into deliveryaddress values(null,#{contactName},#{contactSex},#{contactTel},#{address},#{userId},0)")
-    public int saveDeliveryAddress(DeliveryAddress deliveryAddress) throws SQLException;
+    public int saveDeliveryAddress(String userId, String contactName, Integer contactSex, String contactTel, String address) throws SQLException;
 
     @Update("update deliveryaddress set contactName=#{contactName},contactSex=#{contactSex},contactTel=#{contactTel},address=#{address} where daId=#{daId}")
-    public int updateDeliveryAddress(DeliveryAddress deliveryAddress) throws SQLException;
+    public int updateDeliveryAddress(Integer daId, String contactName, Integer contactSex, String contactTel, String address) throws SQLException;
 
     /**
      * 新删除，保留元素

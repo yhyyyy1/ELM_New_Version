@@ -6,6 +6,7 @@ import com.neusoft.elmboot.common.ResultUtils;
 import com.neusoft.elmboot.exception.BusinessException;
 import com.neusoft.elmboot.model.vo.TransactionFlowVo;
 import com.neusoft.elmboot.model.vo.VirtualWalletVo;
+import com.neusoft.elmboot.service.UserService;
 import com.neusoft.elmboot.service.VirtualWalletService;
 import javafx.scene.layout.Background;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,19 @@ public class VirtualWalletController {
     @Autowired
     private VirtualWalletService virtualWalletService;
 
+    @Autowired
+    private UserService userService;
+
     @PostMapping("/newWallet/{userId}")
     public BaseResponse<Integer> saveWallet(@PathVariable(value = "userId") String userId) {
         if (userId == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
+        if (userService.getUserById(userId) != 1) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "当前用户 " + userId + " 不存在");
+        }
         if (virtualWalletService.getWallet(userId) != null) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "当前用户" + userId + " 已经存在虚拟钱包");
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "当前用户 " + userId + " 已经存在虚拟钱包");
         }
         Integer result = virtualWalletService.saveWallet(userId);
         if (result.equals(1)) {
@@ -110,7 +117,7 @@ public class VirtualWalletController {
      * @return
      */
     @PostMapping("/withdraw")
-    public BaseResponse<Integer> withdraw(@RequestParam("userId") String userId, @RequestParam("amount") Integer amount, @RequestParam("amount") String target) {
+    public BaseResponse<Integer> withdraw(@RequestParam("userId") String userId, @RequestParam("amount") Integer amount, @RequestParam("target") String target) {
         if (userId == null || amount == null || target == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }

@@ -44,15 +44,18 @@ public class OrdersController {
         }
     }
 
-    @PostMapping("/newOrders/{orders}")
-    public BaseResponse<Integer> createOrders(@PathVariable(value = "orders") Orders orders) throws Exception {
-        if (orders.getUserId() == null || orders.getBusinessId() == null || orders.getDaId() == null || orders.getOrderTotal() == null) {
+    @PostMapping("/newOrders")
+    public BaseResponse<Integer> createOrders(@RequestParam("userId") String userId,
+                                              @RequestParam("businessId") Integer businessId,
+                                              @RequestParam("daId") Integer daId,
+                                              @RequestParam("orderTotal") Double orderTotal) throws Exception {
+        if (userId == null || businessId == null || daId == null || orderTotal == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
-        if (orders.getOrderTotal() < 0) {
+        if (orderTotal < 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "订单总支付价格不能小于零");
         }
-        Integer result = ordersService.createOrders(orders);
+        Integer result = ordersService.createOrders(userId, businessId, daId, orderTotal);
         if (result.equals(1)) {
             return ResultUtils.success(result);
         } else {
@@ -60,12 +63,12 @@ public class OrdersController {
         }
     }
 
-    @PostMapping("/newStates/{orders}")
-    public BaseResponse<Integer> updateOrder(@PathVariable(value = "orders") Orders orders) throws Exception {
-        if (orders.getUserId() == null || orders.getOrderState() == null) {
+    @PostMapping("/newStates")
+    public BaseResponse<Integer> updateOrder(@RequestParam("orderId") Integer orderId, @RequestParam("orderState") Integer orderState) throws Exception {
+        if (orderId == null || orderState == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
-        Integer result = ordersService.updateOrder(orders.getOrderId(), orders.getOrderState());
+        Integer result = ordersService.updateOrder(orderId, orderState);
         if (result.equals(1)) {
             return ResultUtils.success(result);
         } else {
@@ -73,15 +76,15 @@ public class OrdersController {
         }
     }
 
-    @PostMapping("/newTotals/{orders}")
-    public BaseResponse<Integer> updateOrders(@PathVariable(value = "orders") Orders orders) throws Exception {
-        if (orders.getUserId() == null || orders.getOrderTotal() == null) {
+    @PostMapping("/newTotals")
+    public BaseResponse<Integer> updateOrders(@RequestParam("orderId") Integer orderId, @RequestParam("orderTotal") Double orderTotal) throws Exception {
+        if (orderId == null || orderTotal == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
-        if (orders.getOrderTotal() < 0) {
+        if (orderTotal < 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "订单总支付价格不能小于零");
         }
-        Integer result = ordersService.updateOrders(orders.getOrderId(), orders.getOrderTotal());
+        Integer result = ordersService.updateOrders(orderId, orderTotal);
         if (result.equals(1)) {
             return ResultUtils.success(result);
         } else {

@@ -27,16 +27,16 @@ public class UserServiceImpl implements UserService {
     private PointMapper pointMapper;
 
     @Override
-    public Map<String, String> getUserByIdByPass(User user) {
+    public Map<String, String> getUserByIdByPass(String userId, String password) {
         try {
-            User user1 = userMapper.getUserByIdByPass(user);
+            User user1 = userMapper.getUserByIdByPass(userId, password);
             if (user1 == null) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "数据库操作失败，用户登录失败");
             }
 
             //获取Token
             Map<String, String> claim = new HashMap<String, String>();
-            claim.put("user", user.getUserId());
+            claim.put("user", userId);
             JWTUtil jwtUtil = new JWTUtil();
             String token = jwtUtil.getToken(claim);
 
@@ -67,10 +67,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int saveUser(User user) {
+    public int saveUser(String userId, String password, String userName, Integer userSex) {
         try {
-            pointMapper.savePoint(user.getUserId());
-            return userMapper.saveUser(user);
+            pointMapper.savePoint(userId);
+            return userMapper.saveUser(userId, password, userName, userSex);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

@@ -22,21 +22,23 @@ public class UserController {
 
 
     //todo 为什么要改成Post？
+
     /**
      * 用户登录
      * 虽然没有涉及到业务数据的变化，但是登录还是要用post方法以掩盖敏感信息
      *
-     * @param user
+     * @param userId
+     * @param password
      * @return
      * @throws Exception
      */
     @PostMapping("/logged-in-users")
-    public BaseResponse<Map<String, String>> getUserByIdByPass(@RequestParam("user") User user) throws Exception {
-        if (StringUtils.isAnyBlank(user.getUserId(), user.getPassword())) {
+    public BaseResponse<Map<String, String>> getUserByIdByPass(@RequestParam("userId") String userId, @RequestParam("password") String password) throws Exception {
+        if (StringUtils.isAnyBlank(userId, password)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
-        Map<String, String> result = userService.getUserByIdByPass(user);
-        if (result.isEmpty()) {
+        Map<String, String> result = userService.getUserByIdByPass(userId, password);
+        if (!result.isEmpty()) {
             return ResultUtils.success(result);
         } else {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "数据库操作失败，用户登录失败");
@@ -46,16 +48,16 @@ public class UserController {
     /**
      * 避免重复用户
      *
-     * @param user
+     * @param userId
      * @return
      * @throws Exception
      */
-    @GetMapping("/{user}")
-    public BaseResponse<Integer> getUserById(@PathVariable(value = "user") User user) throws Exception {
-        if (StringUtils.isEmpty(user.getUserId())) {
+    @GetMapping("/{userId}")
+    public BaseResponse<Integer> getUserById(@PathVariable(value = "userId") String userId) throws Exception {
+        if (StringUtils.isEmpty(userId)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
-        Integer result = userService.getUserById(user.getUserId());
+        Integer result = userService.getUserById(userId);
         if (result.equals(1)) {
             return ResultUtils.success(result);
         } else {
@@ -63,15 +65,19 @@ public class UserController {
         }
     }
 
-    @PostMapping("/newUsers/{user}")
-    public BaseResponse<Integer> saveUser(@PathVariable(value = "user") User user) throws Exception {
-        if (StringUtils.isAnyBlank(user.getUserId(), user.getPassword(), user.getUserName()) || user.getPassword() == null) {
+    @PostMapping("/newUsers")
+    public BaseResponse<Integer> saveUser(@RequestParam("userId") String userId,
+                                          @RequestParam("password") String password,
+                                          @RequestParam("userName") String userName,
+                                          @RequestParam("userSex") Integer userSex) throws Exception {
+        System.out.println(userId + password + userName + userSex);
+        if (StringUtils.isAnyBlank(userId, password, userName) || password == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
-        if (user.getPassword().length() < 6) {
+        if (password.length() < 6) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "密码长度过短，应大于6位");
         }
-        Integer result = userService.saveUser(user);
+        Integer result = userService.saveUser(userId, password, userName, userSex);
         if (result.equals(1)) {
             return ResultUtils.success(result);
         } else {

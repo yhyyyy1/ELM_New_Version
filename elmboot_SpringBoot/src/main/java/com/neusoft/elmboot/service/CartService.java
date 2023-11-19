@@ -4,13 +4,14 @@ import java.util.List;
 
 import com.neusoft.elmboot.model.bo.Cart;
 import com.neusoft.elmboot.model.vo.CartVo;
+import org.springframework.web.bind.annotation.RequestParam;
 
 public interface CartService {
-    public List<CartVo> listCart(Cart cart);
+    public List<CartVo> listCart(Integer cartId, String userId, Integer businessId);
 
-    public int saveCart(Cart cart);
+    public int saveCart(Integer cartId, Integer businessId, Integer foodId);
 
-    public int updateCart(Cart cart);
+    public int updateCart(Integer businessId, Integer foodId, String userId, Integer quantity);
 
-    public int removeCart(Cart cart);
+    public int removeCart(String userId, Integer businessId, Integer foodId);
 }

@@ -48,20 +48,25 @@ public class DeliveryAddressController {
     }
 
     @PostMapping("/newDA/{deliveryAddress}")
-    public BaseResponse<Integer> saveDeliveryAddress(@PathVariable(value = "deliveryAddress") DeliveryAddress deliveryAddress) throws Exception {
-        if (deliveryAddress.getContactName() == null || deliveryAddress.getContactSex() == null || deliveryAddress.getContactTel() == null || deliveryAddress.getAddress() == null) {
+    public BaseResponse<Integer> saveDeliveryAddress(@RequestParam("userId") String userId,
+                                                     @RequestParam("contactName") String contactName,
+                                                     @RequestParam("contactSex") Integer contactSex,
+                                                     @RequestParam("contactTel") String contactTel,
+                                                     @RequestParam("address") String address) throws Exception {
+        if (userId == null || contactName == null || contactSex == null || contactTel == null || address == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
-        if (deliveryAddress.getContactSex() != 1 && deliveryAddress.getContactSex() != 0) {
+
+        if (contactSex != 1 && contactSex != 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "性别参数应该为1 or 0");
         }
-        if (deliveryAddress.getContactTel().length() != 11) {
+        if (contactTel.length() != 11) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "联系电话应该为11位");
         }
-        if (deliveryAddress.getContactTel().charAt(0) != '0' && deliveryAddress.getContactTel().charAt(0) != '1') {
+        if (address.charAt(0) != '0' && contactTel.charAt(0) != '1') {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "联系电话应该以1 或 0开头");
         }
-        Integer result = deliveryAddressService.saveDeliveryAddress(deliveryAddress);
+        Integer result = deliveryAddressService.saveDeliveryAddress(userId, contactName, contactSex, contactTel, address);
         if (result.equals(1)) {
             return ResultUtils.success(result);
         } else {
@@ -70,20 +75,24 @@ public class DeliveryAddressController {
     }
 
     @PostMapping("/updated-DA/{deliveryAddress}")
-    public BaseResponse<Integer> updateDeliveryAddress(@PathVariable(value = "deliveryAddress") DeliveryAddress deliveryAddress) throws Exception {
-        if (deliveryAddress.getContactName() == null || deliveryAddress.getContactSex() == null || deliveryAddress.getContactTel() == null || deliveryAddress.getAddress() == null) {
+    public BaseResponse<Integer> updateDeliveryAddress(@RequestParam("daId") Integer daId,
+                                                       @RequestParam("contactName") String contactName,
+                                                       @RequestParam("contactSex") Integer contactSex,
+                                                       @RequestParam("contactTel") String contactTel,
+                                                       @RequestParam("address") String address) throws Exception {
+        if (daId == null || contactName == null || contactSex == null || contactTel == null || address == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数不可为空");
         }
-        if (deliveryAddress.getContactSex() != 1 && deliveryAddress.getContactSex() != 0) {
+        if (contactSex != 1 && contactSex != 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "性别参数应该为1 or 0");
         }
-        if (deliveryAddress.getContactTel().length() != 11) {
+        if (contactTel.length() != 11) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "联系电话应该为11位");
         }
-        if (deliveryAddress.getContactTel().charAt(0) != '0' && deliveryAddress.getContactTel().charAt(0) != '1') {
+        if (contactTel.charAt(0) != '0' && contactTel.charAt(0) != '1') {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "联系电话应该以1 或 0开头");
         }
-        Integer result = deliveryAddressService.updateDeliveryAddress(deliveryAddress);
+        Integer result = deliveryAddressService.updateDeliveryAddress(daId, contactName, contactSex, contactTel, address);
         if (result.equals(1)) {
             return ResultUtils.success(result);
         } else {

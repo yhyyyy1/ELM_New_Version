@@ -31,8 +31,8 @@ public class VirtualWalletServiceImpl implements VirtualWalletService {
 
     @Override
     public int saveWallet(String userId) {
-        String currentTime = DateUtil.getTodayString();
         try {
+            String currentTime = DateUtil.getTodayString();
             return virtualWalletMapper.saveVirtualWallet(userId, currentTime);
         } catch (SQLException e) {
             throw new RuntimeException(e);

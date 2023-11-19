@@ -32,16 +32,22 @@ public class OrdersServiceImpl implements OrdersService {
 
     @Override
     @Transactional
-    public int createOrders(Orders orders) {
+    public int createOrders(String userId, Integer businessId, Integer daId, Double orderTotal) {
         //1、查询当前用户购物车中当前商家的所有食品
         Cart cart = new Cart();
-        cart.setUserId(orders.getUserId());
-        cart.setBusinessId(orders.getBusinessId());
-        List<Cart> cartList = cartMapper.listCart(cart);
+        cart.setUserId(userId);
+        cart.setBusinessId(businessId);
+        List<Cart> cartList = cartMapper.listCart(cart.getCartId(), cart.getUserId(), cart.getBusinessId());
+        String orderDate = DateUtil.getTodayString();
 
+        Orders orders = new Orders();
+        orders.setUserId(userId);
+        orders.setBusinessId(businessId);
+        orders.setOrderDate(orderDate);
+        orders.setOrderTotal(orderTotal);
+        orders.setDaId(daId);
 
         //2、创建订单（返回生成的订单编号）
-        orders.setOrderDate(DateUtil.getTodayString());
         try {
             ordersMapper.saveOrders(orders);
         } catch (SQLException e) {
@@ -50,23 +56,23 @@ public class OrdersServiceImpl implements OrdersService {
         int orderId = orders.getOrderId();
 
         //3、批量添加订单明细
-        List<OrderDetailet> list = new ArrayList<>();
+        List<OrderDetailet> orderDetailetList = new ArrayList<>();
         for (Cart c : cartList) {
             OrderDetailet od = new OrderDetailet();
             od.setOrderId(orderId);
             od.setFoodId(c.getFoodId());
             od.setQuantity(c.getQuantity());
-            list.add(od);
+            orderDetailetList.add(od);
         }
         try {
-            orderDetailetMapper.saveOrderDetailetBatch(list);
+            orderDetailetMapper.saveOrderDetailetBatch(orderDetailetList);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
         //4、从购物车表中删除相关食品信息
         try {
-            cartMapper.removeCart(cart);
+            cartMapper.removeCart(cart.getUserId(), cart.getBusinessId(), cart.getFoodId());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
